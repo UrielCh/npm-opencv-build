@@ -156,7 +156,7 @@ export class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVBuildEnvP
         if (opts.prebuild) {
             const builds = this.listBuild();
             if (!builds.length) {
-                throw Error(`No build found in ${this.rootDir} you should launch opencv-build-npm once`);
+                throw Error(`No build found in ${this.rootDir} you should launch opencv-build-npm once or define OPENCV_BUILD_ROOT`);
             }
             if (builds.length > 1) {
                 switch (opts.prebuild) {
