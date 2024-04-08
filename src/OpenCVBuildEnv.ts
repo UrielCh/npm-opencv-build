@@ -141,24 +141,33 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         if (os === "win32") {
             // chocolatey
             if (!process.env.OPENCV_BIN_DIR) {
-                const candidate = "c:\\tools\\opencv\\build\\x64\\vc14\\bin";
-                if (fs.existsSync(candidate)) {
-                    process.env.OPENCV_BIN_DIR = candidate;
-                    summery.push('OPENCV_BIN_DIR resolved');
-                    changes++;
-                } else {
-                    summery.push(`failed to resolve OPENCV_BIN_DIR from ${candidate}`);
+                const lookup = "c:/tools/opencv/build/x64/vc*/bin";
+                const candidates = blob(lookup);
+                for (const candidate of candidates) {
+                    if (fs.existsSync(candidate)) {
+                        process.env.OPENCV_BIN_DIR = candidate;
+                        summery.push('OPENCV_BIN_DIR resolved');
+                        changes++;
+                        break;
+                    }
                 }
-
+                if (!candidates.length) {
+                    summery.push(`failed to resolve OPENCV_BIN_DIR from ${lookup}`);
+                }
             }
             if (!process.env.OPENCV_LIB_DIR) {
-                const candidate = "c:\\tools\\opencv\\build\\x64\\vc14\\lib"
+                const lookup = "c:/tools/opencv/build/x64/vc*/lib";
+                // const candidate = "c:\\tools\\opencv\\build\\x64\\vc14\\lib"
+                const candidates = blob(lookup);
+                for (const candidate of candidates) {
                 if (fs.existsSync(candidate)) {
                     process.env.OPENCV_LIB_DIR = candidate;
                     summery.push('OPENCV_LIB_DIR resolved');
                     changes++;
-                } else {
-                    summery.push(`failed to resolve OPENCV_LIB_DIR from ${candidate}`);
+                }
+             }
+             if (!candidates.length) {
+                  summery.push(`failed to resolve OPENCV_LIB_DIR from ${lookup}`);
                 }
             }
             if (!process.env.OPENCV_INCLUDE_DIR) {
