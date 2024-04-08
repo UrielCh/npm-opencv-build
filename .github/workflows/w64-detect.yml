@@ -1,0 +1,43 @@
+name: detect openCV from Chocolatey
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        # node-version: [14.x, 16.x, 18.x]
+        opencv_version:
+          - 4.7.0
+          - 4.6.0
+    steps:
+    #- name: Install cmake
+    #  run: sudo apt-get install -y cmake
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8.14.0
+        run_install: |
+         - recursive: true
+           args: [--frozen-lockfile, --strict-peer-dependencies]         
+    - name: Install OpenCV
+      run: |
+        choco install OpenCV -y --version ${{ matrix.opencv_version }}
+    - name: Use Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: 'pnpm'
+    - run: pnpm run build
+    - run: node bin/main.js
+    - run: pnpm test

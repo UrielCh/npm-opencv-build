@@ -142,32 +142,38 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             // chocolatey
             if (!process.env.OPENCV_BIN_DIR) {
                 const lookup = "c:/tools/opencv/build/x64/vc*/bin";
-                const candidates = blob(lookup);
+                const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\bin", "c:\\tools\\opencv\\build\\x64\\vc16\\bin"];
+                // const candidates = blob(lookup); // blob looks broken
+                let fnd = false;
                 for (const candidate of candidates) {
                     if (fs.existsSync(candidate)) {
+                        fnd = true;
                         process.env.OPENCV_BIN_DIR = candidate;
-                        summery.push('OPENCV_BIN_DIR resolved');
+                        summery.push(`OPENCV_BIN_DIR resolved as ${highlight(candidate)}`);
                         changes++;
                         break;
                     }
                 }
-                if (!candidates.length) {
-                    summery.push(`failed to resolve OPENCV_BIN_DIR from ${lookup}`);
+                if (!fnd) {
+                    summery.push(`failed to resolve OPENCV_BIN_DIR from ${lookup} => ${candidates.join(',')}`);
                 }
             }
             if (!process.env.OPENCV_LIB_DIR) {
                 const lookup = "c:/tools/opencv/build/x64/vc*/lib";
-                // const candidate = "c:\\tools\\opencv\\build\\x64\\vc14\\lib"
-                const candidates = blob(lookup);
+                const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\lib", "c:\\tools\\opencv\\build\\x64\\vc16\\lib"]
+                // const candidates = blob(lookup); // blob looks broken
+                let fnd = false;
                 for (const candidate of candidates) {
-                if (fs.existsSync(candidate)) {
-                    process.env.OPENCV_LIB_DIR = candidate;
-                    summery.push('OPENCV_LIB_DIR resolved');
-                    changes++;
+                    if (fs.existsSync(candidate)) {
+                        fnd = true;
+                        process.env.OPENCV_LIB_DIR = candidate;
+                        summery.push(`OPENCV_LIB_DIR resolved as ${highlight(candidate)}`);
+                        changes++;
+                        break;
+                    }
                 }
-             }
-             if (!candidates.length) {
-                  summery.push(`failed to resolve OPENCV_LIB_DIR from ${lookup}`);
+                if (!fnd) {
+                  summery.push(`failed to resolve OPENCV_LIB_DIR from ${lookup} => ${candidates.join(',')}`);
                 }
             }
             if (!process.env.OPENCV_INCLUDE_DIR) {
