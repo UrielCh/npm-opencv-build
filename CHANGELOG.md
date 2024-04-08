@@ -1,5 +1,8 @@
 # Changelog
 
+## V 0.8.0
+- improve openCV path autodetection for chocolatey installation
+
 ## V 0.7.8
 - fix ESM/commonJS dual stack
 - update deps verison
