@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "master" ]
 
-env:
-  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-
 jobs:
   build:
 
