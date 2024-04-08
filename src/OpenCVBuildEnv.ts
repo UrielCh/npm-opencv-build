@@ -328,12 +328,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         // try to use previouse build
         this.no_autobuild = toBool(this.resolveValue(ALLARGS.nobuild)) ? '1' : '';
 
-        console.log("if (!this.no_autobuild && opts.prebuild)");
-        console.log("this.no_autobuild:", this.no_autobuild);
-        console.log("opts.prebuild:", opts.prebuild);
-
         if (!this.no_autobuild && opts.prebuild) {
-            console.log("this.rootDir", this.rootDir);
             let builds = OpenCVBuildEnv.listBuild(this.rootDir);
             if (!builds.length) {
                 throw Error(`No build found in ${this.rootDir} you should launch opencv-build-npm once`);
