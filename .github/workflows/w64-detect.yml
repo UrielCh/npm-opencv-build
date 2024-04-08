@@ -39,5 +39,5 @@ jobs:
         node-version: 20
         cache: 'pnpm'
     - run: pnpm run build
-    - run: node bin/main.js --nobuild
+    - run: node bin/main.js --nobuild --prebuild=latestBuild
     - run: pnpm test

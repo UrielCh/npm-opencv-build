@@ -57,7 +57,7 @@ type stringKey = keyof OpenCVBuildEnvParamsString;
  * Options as usable in opencv4nodejs section from package.json
  * Middle priority values
  */
-export type OpenCVPackageBuildOptions = { [key in boolKey | stringKey]?: string };
+export type OpenCVPackageBuildOptions = { [key in boolKey | stringKey]?: string } & {prebuild?: "latestBuild" | "latestVersion" | "oldestBuild" | "oldestVersion"};
 
 export interface OpenCVBuildEnvParams extends OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString {
     /**
@@ -91,6 +91,7 @@ export const ALLARGS = {
     version: { arg: 'version', conf: 'autoBuildOpencvVersion', env: 'OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION', isBool: false, doc: 'OpenCV version' } as ArgInfo,
     flags: { arg: 'flags', conf: 'autoBuildFlags', env: 'OPENCV4NODEJS_AUTOBUILD_FLAGS', isBool: false, doc: 'OpenCV cMake Build flags' } as ArgInfo,
     root: { arg: 'root', conf: 'rootcwd', env: 'INIT_CWD', isBool: false, doc: 'OpenCV-build root directory (deprecated)' } as ArgInfo,
+    prebuild: { arg: 'prebuild', conf: 'prebuild', env: 'OPENCV_PREBUILD', isBool: false, doc: 'force prebuild param: latestBuild|latestVersion|oldestBuild|oldestVersion' } as ArgInfo,
     buildRoot: { arg: 'buildRoot', conf: 'buildRoot', env: 'OPENCV_BUILD_ROOT', isBool: false, doc: 'OpenCV build directory' } as ArgInfo,
     cuda: { arg: 'cuda', conf: 'autoBuildBuildCuda', env: 'OPENCV4NODEJS_BUILD_CUDA', isBool: true, doc: 'Enable cuda in OpenCV build' } as ArgInfo,
     // add on 28/12/2022
