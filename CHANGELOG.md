@@ -1,5 +1,8 @@
 # Changelog
 
+## V 0.8.3
+- 0.8.2 deployed failed
+
 ## V 0.8.2
 - npm-opencv-build can no longer provide a diffrent bulit version from asked version.
 - fix esm/cjs dual stack
