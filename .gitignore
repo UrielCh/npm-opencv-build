@@ -3,4 +3,9 @@ node_modules
 opencv-*/
 lib/
 .pnpm-debug.log
-dist/
+dist/esm/*.js
+dist/esm/*.ts
+dist/esm/*.map
+dist/cjs/*.js
+dist/cjs/*.ts
+dist/cjs/*.map

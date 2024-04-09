@@ -329,7 +329,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         this.no_autobuild = toBool(this.resolveValue(ALLARGS.nobuild)) ? '1' : '';
 
         if (!this.no_autobuild && opts.prebuild) {
-            let builds = OpenCVBuildEnv.listBuild(this.rootDir);
+            const builds = OpenCVBuildEnv.listBuild(this.rootDir);
             if (!builds.length) {
                 throw Error(`No build found in ${this.rootDir} you should launch opencv-build-npm once`);
             }
@@ -341,12 +341,12 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             /**
              * but if no match, use the latest build with a different version number.
              */
-            if (buildV.length)
-                builds = buildV;
-            if (!builds.length) {
-                throw Error(`No build of version ${expVer} found in ${this.rootDir} you should launch opencv-build-npm`);
+            // if (buildV.length)
+            //     builds = buildV;
+            if (!buildV.length) {
+                throw Error(`No build of version ${expVer} found in ${this.rootDir} you should launch opencv-build-npm Available versions are: ${builds.map(b => b.buildInfo.opencvVersion).join(', ')}`);
             }
-            if (builds.length > 1) {
+            if (buildV.length > 1) {
                 switch (opts.prebuild) {
                     case 'latestBuild':
                         builds.sort((a, b) => b.date.getTime() - a.date.getTime());
