@@ -23,7 +23,7 @@ function toBool(value?: string | null) {
     return true;
 }
 
-const DEFAULT_OPENCV_VERSION = '4.6.0';
+// const DEFAULT_OPENCV_VERSION = '4.6.0';
 
 export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString {
     public prebuild?: 'latestBuild' | 'latestVersion' | 'oldestBuild' | 'oldestVersion';
@@ -275,7 +275,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         const opencvVersion = this.resolveValue(ALLARGS.version);
         if (opencvVersion)
             return opencvVersion;
-        return DEFAULT_OPENCV_VERSION;
+        return '0.0.0'; //DEFAULT_OPENCV_VERSION;
     }
 
     // private getExpectedBuildWithCuda(): boolean {
@@ -337,7 +337,9 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             /**
              * try to match the expected version
              */
-            const buildV = builds.filter(b => b.buildInfo.opencvVersion === expVer);
+            let buildV = builds;
+            if (expVer != '0.0.0')
+                buildV = buildV.filter(b => b.buildInfo.opencvVersion === expVer);
             /**
              * but if no match, use the latest build with a different version number.
              */
