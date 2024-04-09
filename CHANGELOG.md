@@ -2,7 +2,7 @@
 
 ## V 0.8.2
 - npm-opencv-build can no longer provide a diffrent bulit version from asked version.
-- - fix esm/cjs dual stack
+- fix esm/cjs dual stack
 
 ## V 0.8.1
 - fix 0.8.0 regression 
