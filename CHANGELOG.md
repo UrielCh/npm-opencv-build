@@ -1,5 +1,8 @@
 # Changelog
 
+## V 0.8.4
+- npmlog can now be disabled
+
 ## V 0.8.3
 - 0.8.2 deployed failed
 

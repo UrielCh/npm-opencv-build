@@ -1,7 +1,7 @@
 import fs, { Stats } from 'fs';
 import os from 'os';
 import path from 'path';
-import log from 'npmlog';
+import log, { LogLevels } from 'npmlog';
 import { highlight, formatNumber, isCudaAvailable } from './utils.js';
 import crypto from 'crypto';
 import { AutoBuildFile, EnvSummery } from './types.js';
@@ -26,6 +26,13 @@ function toBool(value?: string | null) {
 // const DEFAULT_OPENCV_VERSION = '4.6.0';
 
 export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString {
+    public static silence: boolean;
+
+    public static log(level: LogLevels | string, prefix: string, message: string, ...args: unknown[]): void {
+        if (!OpenCVBuildEnv.silence)
+            log.log(level, prefix, message, ...args);
+    }
+
     public prebuild?: 'latestBuild' | 'latestVersion' | 'oldestBuild' | 'oldestVersion';
     /**
      * set using env OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION , or --version or autoBuildOpencvVersion option in package.json
@@ -121,10 +128,11 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
                 }
                 return autoBuildFileData
             }
-            if (!quiet) log.info('readAutoBuildFile', 'file does not exists: %s', autoBuildFile)
+            if (!quiet)
+                OpenCVBuildEnv.log("info", 'readAutoBuildFile', 'file does not exists: %s', autoBuildFile)
         } catch (err) {
             //if (!quiet)
-            log.error('readAutoBuildFile', 'failed to read auto-build.json from: %s, with error: %s', autoBuildFile, err.toString())
+            OpenCVBuildEnv.log('error', 'readAutoBuildFile', 'failed to read auto-build.json from: %s, with error: %s', autoBuildFile, err.toString())
         }
         return undefined
     }
@@ -317,13 +325,13 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         try {
             const data = OpenCVBuildEnv.readEnvsFromPackageJson();
             if (data === null && !this.prebuild) {
-                log.info('config', `No file ${highlight("%s")} found for opencv4nodejs import`, OpenCVBuildEnv.getPackageJson());
+                OpenCVBuildEnv.log('info', 'config', `No file ${highlight("%s")} found for opencv4nodejs import`, OpenCVBuildEnv.getPackageJson());
             }
             if (data)
                 this.#packageEnv = data
         } catch (err) {
-            log.error('applyEnvsFromPackageJson', 'failed to parse package.json:')
-            log.error('applyEnvsFromPackageJson', err)
+            OpenCVBuildEnv.log('error', 'applyEnvsFromPackageJson', 'failed to parse package.json:')
+            OpenCVBuildEnv.log('error', 'applyEnvsFromPackageJson', err)
         }
         // try to use previouse build
         this.no_autobuild = toBool(this.resolveValue(ALLARGS.nobuild)) ? '1' : '';
@@ -423,10 +431,10 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             OpenCVBuildEnv.autoLocatePrebuild();
         } else {
             this.opencvVersion = this.getExpectedVersion();
-            log.info('init', `using openCV verison ${formatNumber(this.opencvVersion)}`)
+            OpenCVBuildEnv.log('info', 'init', `using openCV verison ${formatNumber(this.opencvVersion)}`)
 
             if (process.env.INIT_CWD) {
-                log.info('init', `${highlight("INIT_CWD")} is defined overwriting root path to ${highlight(process.env.INIT_CWD)}`)
+                OpenCVBuildEnv.log('info', 'init', `${highlight("INIT_CWD")} is defined overwriting root path to ${highlight(process.env.INIT_CWD)}`)
             }
             // ensure that OpenCV workdir exists
             if (!fs.existsSync(this.buildRoot)) {
@@ -441,8 +449,8 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         const envKeys = Object.keys(this.#packageEnv)
         if (envKeys.length) {
             // print all imported variables
-            log.info('applyEnvsFromPackageJson', 'the following opencv4nodejs environment variables are set in the package.json:')
-            envKeys.forEach((key: keyof OpenCVPackageBuildOptions) => log.info('applyEnvsFromPackageJson', `${highlight(key)}: ${formatNumber(this.#packageEnv[key] || '')}`))
+            OpenCVBuildEnv.log('info', 'applyEnvsFromPackageJson', 'the following opencv4nodejs environment variables are set in the package.json:')
+            envKeys.forEach((key: keyof OpenCVPackageBuildOptions) => OpenCVBuildEnv.log('info', 'applyEnvsFromPackageJson', `${highlight(key)}: ${formatNumber(this.#packageEnv[key] || '')}`))
         }
 
         this.autoBuildFlags = this.resolveValue(ALLARGS.flags);
@@ -574,7 +582,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         const cMakeflags = [];
         if (this.buildWithCuda) {
             if (isCudaAvailable()) {
-                // log.info('install', 'Adding CUDA flags...');
+                // OpenCVBuildEnv.log('info', 'install', 'Adding CUDA flags...');
                 // this.enabledModules.delete('cudacodec');// video codec (NVCUVID) is deprecated in cuda 10, so don't add it
                 cMakeflags.push('-DWITH_CUDA=ON', '-DCUDA_FAST_MATH=ON'/* optional */, '-DWITH_CUBLAS=ON' /* optional */, "-DOPENCV_DNN_CUDA=ON")
 
@@ -596,7 +604,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
                 }
             } else {
                 if (!this.getConfiguredCmakeFlagsOnce)
-                    log.error('install', 'failed to locate CUDA setup');
+                    OpenCVBuildEnv.log('error', 'install', 'failed to locate CUDA setup');
             }
         }
 
@@ -606,7 +614,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             const buildList = addedFlags.find(a => a.startsWith('-DBUILD_LIST'));
             if (buildList) {
                 if (!this.getConfiguredCmakeFlagsOnce)
-                    log.info('config', `cmake flag contains special ${pc.red('DBUILD_LIST')} options "${highlight('%s')}" automatic cmake flags are now disabled.`, buildList);
+                    OpenCVBuildEnv.log('info', 'config', `cmake flag contains special ${pc.red('DBUILD_LIST')} options "${highlight('%s')}" automatic cmake flags are now disabled.`, buildList);
                     const extraModules = (buildList.split('=')[1] || '').split(',').filter(a=>a);
                     for (const extraModule of extraModules) {
                         // drop any --DWITH_
@@ -617,7 +625,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             } else {
                 cMakeflags.push(...this.getCmakeBuildFlags());
             }
-            // log.silly('install', 'using flags from OPENCV4NODEJS_AUTOBUILD_FLAGS:', this.autoBuildFlags)
+            // OpenCVBuildEnv.log('silly', 'install', 'using flags from OPENCV4NODEJS_AUTOBUILD_FLAGS:', this.autoBuildFlags)
             // cMakeflags.push(...this.autoBuildFlags.split(/\s+/));
             for (const arg of addedFlags) {
                 const m = arg.match(/^(-D.+=)(.+)$/);
@@ -630,15 +638,15 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
                 if (pos >= 0) {
                     if (cMakeflags[pos] === arg) {
                         if (!this.getConfiguredCmakeFlagsOnce)
-                            log.info('config', `cmake flag "${highlight('%s')}" had no effect.`, arg);
+                            OpenCVBuildEnv.log('info', 'config', `cmake flag "${highlight('%s')}" had no effect.`, arg);
                     } else {
                         if (!this.getConfiguredCmakeFlagsOnce)
-                            log.info('config', `replacing cmake flag "${highlight('%s')}" by "${highlight('%s')}"`, cMakeflags[pos], m[0]);
+                            OpenCVBuildEnv.log('info', 'config', `replacing cmake flag "${highlight('%s')}" by "${highlight('%s')}"`, cMakeflags[pos], m[0]);
                         cMakeflags[pos] = m[0];
                     }
                 } else {
                     if (!this.getConfiguredCmakeFlagsOnce)
-                        log.info('config', `adding cmake flag "${highlight('%s')}"`, m[0]);
+                        OpenCVBuildEnv.log('info', 'config', `adding cmake flag "${highlight('%s')}"`, m[0]);
                     cMakeflags.push(m[0]);
                 }
             }
@@ -698,16 +706,16 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
 
         if (!rootPackageJSON.data) {
             if (!OpenCVBuildEnv.readEnvsFromPackageJsonLog++)
-                log.info('config', `looking for opencv4nodejs option from ${highlight("%s")}`, rootPackageJSON.file);
+                OpenCVBuildEnv.log('info', 'config', `looking for opencv4nodejs option from ${highlight("%s")}`, rootPackageJSON.file);
             return {}
         }
         if (!rootPackageJSON.data.opencv4nodejs) {
             if (!OpenCVBuildEnv.readEnvsFromPackageJsonLog++)
-                log.info('config', `no opencv4nodejs section found in ${highlight('%s')}`, rootPackageJSON.file);
+                OpenCVBuildEnv.log('info', 'config', `no opencv4nodejs section found in ${highlight('%s')}`, rootPackageJSON.file);
             return {};
         }
         if (!OpenCVBuildEnv.readEnvsFromPackageJsonLog++)
-            log.info('config', `found opencv4nodejs section in ${highlight('%s')}`, rootPackageJSON.file);
+            OpenCVBuildEnv.log('info', 'config', `found opencv4nodejs section in ${highlight('%s')}`, rootPackageJSON.file);
         return rootPackageJSON.data.opencv4nodejs
     }
     private hash = '';
