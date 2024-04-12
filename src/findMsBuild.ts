@@ -1,7 +1,7 @@
 import log from 'npmlog';
 import { execFile, formatNumber, highlight, light } from './utils.js';
-import blob from '@u4/tiny-glob';
 import path from 'path';
+import {globSync} from "glob";
 
 export interface PathVersion {
   version: number;
@@ -18,7 +18,7 @@ export async function findMSBuild(): Promise<PathVersion[]> {
   for (const progFile of progFiles) {
     if (progFile) {
       const reg = `${progFile.replace(/\\/g, '/')}/Microsoft Visual Studio/*/*/MSBuild/*/Bin/MSBuild.exe`;
-      for (const m of await blob(reg, {}))
+      for (const m of globSync(reg))
         matches.push(path.resolve(m));
     }
   }
