@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv-build",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "A simple script to auto build recent OpenCV + contrib version via npm 2022 Edition",
   "main": "dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -53,7 +53,7 @@
   },
   "homepage": "https://github.com/UrielCh/npm-opencv-build#readme",
   "dependencies": {
-    "@u4/tiny-glob": "^0.3.2",
+    "glob": "^10.3.12",
     "npmlog": "^7.0.1",
     "picocolors": "^1.0.0",
     "rimraf": "^4.4.1"

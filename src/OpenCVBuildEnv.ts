@@ -7,8 +7,8 @@ import crypto from 'crypto';
 import { AutoBuildFile, EnvSummery } from './types.js';
 import { ALLARGS, ArgInfo, MODEULES_MAP, OpenCVBuildEnvParams, OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString, OpencvModulesType, OpenCVPackageBuildOptions, OPENCV_PATHS_ENV } from './misc.js';
 import { ALL_OPENCV_MODULES } from './misc.js';
-import { sync as blob } from '@u4/tiny-glob';
 import pc from 'picocolors'
+import {globSync} from "glob";
 
 function toBool(value?: string | null) {
     if (!value)
@@ -168,8 +168,8 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             }
             if (!process.env.OPENCV_LIB_DIR) {
                 const lookup = "c:/tools/opencv/build/x64/vc*/lib";
-                const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\lib", "c:\\tools\\opencv\\build\\x64\\vc16\\lib"]
-                // const candidates = blob(lookup); // blob looks broken
+                // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\lib", "c:\\tools\\opencv\\build\\x64\\vc16\\lib"]
+                const candidates = globSync(lookup); // blob looks broken
                 let fnd = false;
                 for (const candidate of candidates) {
                     if (fs.existsSync(candidate)) {
@@ -209,8 +209,8 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             if (!process.env.OPENCV_LIB_DIR) {
                 const lookup = "/usr/lib/*-linux-gnu";
                 // tiny-blob need to be fix bypassing th issue
-                const [candidate] = fs.readdirSync('/usr/lib/').filter((a: string) => a.endsWith('-linux-gnu')).map(a => `/usr/lib/${a}`);
-                // const candidates = blob(lookup);
+                //const [candidate] = fs.readdirSync('/usr/lib/').filter((a: string) => a.endsWith('-linux-gnu')).map(a => `/usr/lib/${a}`);
+                const [candidate] = globSync(lookup);
                 if (candidate) {
                     process.env.OPENCV_LIB_DIR = candidate;
                     summery.push(`OPENCV_LIB_DIR resolved`);
@@ -233,7 +233,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             // Brew detection
             if (fs.existsSync("/opt/homebrew/Cellar/opencv")) {
                 const lookup = "/opt/homebrew/Cellar/opencv/*";
-                const candidates = blob(lookup);
+                const candidates = globSync(lookup);
                 if (candidates.length > 1) {
                     summery.push(`homebrew detection found more than one openCV setup: ${candidates.join(',')} using only the first one`);
                 }

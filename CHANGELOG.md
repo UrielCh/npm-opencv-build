@@ -1,5 +1,8 @@
 # Changelog
 
+## V 0.8.5
+- restor he npmjs package glob
+
 ## V 0.8.4
 - npmlog can now be disabled
 
