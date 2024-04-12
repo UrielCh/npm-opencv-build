@@ -1,7 +1,8 @@
-name: detect openCV from Chocolatey
+name: detect openCV from MacOS Brew
 on:
    push:
      branches: [ "never", "master" ]
+     paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/mac-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]
 jobs:
@@ -13,8 +14,7 @@ jobs:
       matrix:
         # node-version: [14.x, 16.x, 18.x]
         opencv_version:
-          - 4.9.0
-          - 4.6.0
+          - 4
     steps:
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |

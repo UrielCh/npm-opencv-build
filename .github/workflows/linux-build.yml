@@ -3,8 +3,10 @@ name: build openCV
 on:
   push:
     branches: [ "master", "piercus" ]
+    paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-build.yml' ]
   pull_request:
     branches: [ "master", "piercus" ]
+    paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-build.yml' ]
 
 env:
   OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION : 4.7.0
