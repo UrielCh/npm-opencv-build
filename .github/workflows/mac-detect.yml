@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
-        brew install opencv -y --version ${{ matrix.opencv_version }}
+        brew install opencv@${{ matrix.opencv_version }}
 
     - uses: actions/checkout@v3
     - uses: pnpm/action-setup@v2
