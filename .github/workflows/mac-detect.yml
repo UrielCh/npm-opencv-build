@@ -1,4 +1,4 @@
-name: detect openCV from MacOS Brew
+name: detect openCV from MacOS Brew no AUTOBUILD
 on:
    push:
      branches: [ "never", "master" ]
@@ -15,6 +15,8 @@ jobs:
         # node-version: [14.x, 16.x, 18.x]
         opencv_version:
           - 4
+    env:
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     steps:
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
