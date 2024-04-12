@@ -1,0 +1,38 @@
+name: detect openCV from Chocolatey
+on:
+   push:
+     branches: [ "never", "master" ]
+#   pull_request:
+#     branches: [ "master" ]
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        # node-version: [14.x, 16.x, 18.x]
+        opencv_version:
+          - 4.9.0
+          - 4.6.0
+    steps:
+    - name: Install OpenCV ${{ matrix.opencv_version }}
+      run: |
+        brew install opencv -y --version ${{ matrix.opencv_version }}
+
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8.14.0
+        run_install: |
+         - recursive: true
+           args: [--frozen-lockfile, --strict-peer-dependencies]
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: 'pnpm'
+    - run: pnpm run build
+    - run: node bin/main.js --prebuild=latestBuild
+    - run: pnpm test
