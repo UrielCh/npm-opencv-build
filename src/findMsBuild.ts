@@ -1,5 +1,5 @@
 import log from 'npmlog';
-import { execFile, formatNumber, highlight, light } from './utils.js';
+import { execFile, formatNumber, highlight, light } from './utils';
 import path from 'path';
 import {globSync} from "glob";
 

@@ -2,13 +2,13 @@ import fs, { Stats } from 'fs';
 import os from 'os';
 import path from 'path';
 import log, { LogLevels } from 'npmlog';
-import { highlight, formatNumber, isCudaAvailable } from './utils.js';
+import { highlight, formatNumber, isCudaAvailable } from './utils';
 import crypto from 'crypto';
-import { AutoBuildFile, EnvSummery } from './types.js';
-import { ALLARGS, ArgInfo, MODEULES_MAP, OpenCVBuildEnvParams, OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString, OpencvModulesType, OpenCVPackageBuildOptions, OPENCV_PATHS_ENV } from './misc.js';
-import { ALL_OPENCV_MODULES } from './misc.js';
+import { AutoBuildFile, EnvSummery } from './types';
+import { ALLARGS, ArgInfo, MODEULES_MAP, OpenCVBuildEnvParams, OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString, OpencvModulesType, OpenCVPackageBuildOptions, OPENCV_PATHS_ENV } from './misc';
+import { ALL_OPENCV_MODULES } from './misc';
 import pc from 'picocolors'
-import {globSync} from "glob";
+import * as detector from './helper/detect';
 
 function toBool(value?: string | null) {
     if (!value)
@@ -145,131 +145,25 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
     public static autoLocatePrebuild(): { changes: number, summery: string[] } {
         let changes = 0;
         const summery = [] as string[];
-        const os = process.platform;
-        if (os === "win32") {
-            // chocolatey
-            if (!process.env.OPENCV_BIN_DIR) {
-                const lookup = "c:/tools/opencv/build/x64/vc*/bin";
-                const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\bin", "c:\\tools\\opencv\\build\\x64\\vc16\\bin"];
-                // const candidates = blob(lookup); // blob looks broken
-                let fnd = false;
-                for (const candidate of candidates) {
-                    if (fs.existsSync(candidate)) {
-                        fnd = true;
-                        process.env.OPENCV_BIN_DIR = candidate;
-                        summery.push(`OPENCV_BIN_DIR resolved as ${highlight(candidate)}`);
-                        changes++;
-                        break;
-                    }
-                }
-                if (!fnd) {
-                    summery.push(`failed to resolve OPENCV_BIN_DIR from ${lookup} => ${candidates.join(',')}`);
-                }
+        if (!process.env.OPENCV_BIN_DIR) {
+            const candidate = detector.detectBinDir();
+            if (candidate) {
+                process.env.OPENCV_BIN_DIR = candidate;
+                changes++;
             }
-            if (!process.env.OPENCV_LIB_DIR) {
-                const lookup = "c:/tools/opencv/build/x64/vc*/lib";
-                // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\lib", "c:\\tools\\opencv\\build\\x64\\vc16\\lib"]
-                const candidates = globSync(lookup); // blob looks broken
-                let fnd = false;
-                for (const candidate of candidates) {
-                    if (fs.existsSync(candidate)) {
-                        fnd = true;
-                        process.env.OPENCV_LIB_DIR = candidate;
-                        summery.push(`OPENCV_LIB_DIR resolved as ${highlight(candidate)}`);
-                        changes++;
-                        break;
-                    }
-                }
-                if (!fnd) {
-                  summery.push(`failed to resolve OPENCV_LIB_DIR from ${lookup} => ${candidates.join(',')}`);
-                }
+        }
+        if (!process.env.OPENCV_LIB_DIR) {
+            const candidate = detector.detectLibDir();
+            if (candidate) {
+                process.env.OPENCV_LIB_DIR = candidate;
+                changes++;
             }
-            if (!process.env.OPENCV_INCLUDE_DIR) {
-                const candidate = "c:\\tools\\opencv\\build\\include"
-                if (fs.existsSync(candidate)) {
-                    process.env.OPENCV_INCLUDE_DIR = candidate;
-                    summery.push('OPENCV_INCLUDE_DIR resolved');
-                    changes++;
-                } else {
-                    summery.push(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
-                }
-            }
-        } else if (os === 'linux') {
-            // apt detection
-            if (!process.env.OPENCV_BIN_DIR) {
-                const candidate = "/usr/bin/";
-                if (fs.existsSync(candidate)) {
-                    process.env.OPENCV_BIN_DIR = candidate;
-                    summery.push('OPENCV_BIN_DIR resolved');
-                    changes++;
-                } else {
-                    summery.push(`failed to resolve OPENCV_BIN_DIR from ${candidate}`);
-                }
-            }
-            if (!process.env.OPENCV_LIB_DIR) {
-                const lookup = "/usr/lib/*-linux-gnu";
-                // tiny-blob need to be fix bypassing th issue
-                //const [candidate] = fs.readdirSync('/usr/lib/').filter((a: string) => a.endsWith('-linux-gnu')).map(a => `/usr/lib/${a}`);
-                const [candidate] = globSync(lookup);
-                if (candidate) {
-                    process.env.OPENCV_LIB_DIR = candidate;
-                    summery.push(`OPENCV_LIB_DIR resolved`);
-                    changes++;
-                } else {
-                    summery.push(`failed to resolve OPENCV_LIB_DIR from ${lookup}`);
-                }
-            }
-            if (!process.env.OPENCV_INCLUDE_DIR) {
-                const candidate = "/usr/include/opencv4/"
-                if (fs.existsSync(candidate)) {
-                    process.env.OPENCV_INCLUDE_DIR = candidate;
-                    summery.push('OPENCV_INCLUDE_DIR resolved');
-                    changes++;
-                } else {
-                    summery.push(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
-                }
-            }
-        } else if (os === 'darwin') {
-            // Brew detection
-            if (fs.existsSync("/opt/homebrew/Cellar/opencv")) {
-                const lookup = "/opt/homebrew/Cellar/opencv/*";
-                const candidates = globSync(lookup);
-                if (candidates.length > 1) {
-                    summery.push(`homebrew detection found more than one openCV setup: ${candidates.join(',')} using only the first one`);
-                }
-                if (candidates.length) {
-                    const dir = candidates[0];
-                    if (!process.env.OPENCV_BIN_DIR) {
-                        const candidate = path.join(dir, "bin");
-                        if (fs.existsSync(candidate)) {
-                            process.env.OPENCV_BIN_DIR = candidate;
-                            summery.push("OPENCV_BIN_DIR resolved");
-                            changes++;
-                        } else {
-                            summery.push(`failed to resolve OPENCV_BIN_DIR from ${lookup}/bin`);
-                        }
-                    }
-                    if (!process.env.OPENCV_LIB_DIR) {
-                        const candidate = path.join(dir, "lib");
-                        if (fs.existsSync(candidate)) {
-                            process.env.OPENCV_LIB_DIR = candidate;
-                            summery.push(`OPENCV_LIB_DIR resolved`);
-                            changes++;
-                        } else {
-                            summery.push(`failed to resolve OPENCV_BIN_DIR from ${lookup}/lib`);
-                        }
-                    }
-                    if (!process.env.OPENCV_INCLUDE_DIR) {
-                        const candidate = path.join(dir, "include");
-                        if (fs.existsSync(candidate)) {
-                            process.env.OPENCV_INCLUDE_DIR = candidate;
-                            summery.push('OPENCV_INCLUDE_DIR resolve');
-                            changes++;
-                        } else {
-                            summery.push(`failed to resolve OPENCV_INCLUDE_DIR from ${lookup}/include`);
-                        }
-                    }
-                }
+        }
+        if (!process.env.OPENCV_INCLUDE_DIR) {
+            const candidate = detector.detectIncludeDir();
+            if (candidate) {
+                process.env.OPENCV_INCLUDE_DIR = candidate;
+                changes++;
             }
         }
         return { changes, summery };
