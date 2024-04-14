@@ -1,7 +1,7 @@
 name: detect openCV from Chocolatey
 on:
    push:
-     branches: [ "never" ]
+     branches: [ "never", "test" ]
      paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/w64-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]

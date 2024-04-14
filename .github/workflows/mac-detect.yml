@@ -1,7 +1,7 @@
 name: detect openCV from MacOS Brew no AUTOBUILD
 on:
    push:
-     branches: [ "never", "master" ]
+     branches: [ "never", "master", "test" ]
      paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/mac-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]
@@ -17,6 +17,7 @@ jobs:
           - 4
     env:
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+      OPENCV_BIN_DIR: .
     steps:
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |

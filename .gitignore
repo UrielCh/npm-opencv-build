@@ -9,3 +9,4 @@ dist/esm/*.map
 dist/cjs/*.js
 dist/cjs/*.ts
 dist/cjs/*.map
+latest
