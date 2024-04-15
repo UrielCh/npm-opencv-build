@@ -36,5 +36,6 @@ jobs:
         cache: 'pnpm'
     - run: pnpm run build
     #  --prebuild=latestBuild
-    - run: node bin/main.js
+    - name: start bin/main.js in verbose
+      run: node bin/main.js --verbose
     - run: pnpm test
