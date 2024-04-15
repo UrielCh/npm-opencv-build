@@ -395,6 +395,11 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             }
         }
         if (this.no_autobuild) {
+            // Try autoDetect opencv paths
+            if (!process.env.OPENCV_BIN_DIR || !process.env.OPENCV_LIB_DIR || !process.env.OPENCV_INCLUDE_DIR) {
+                detector.applyDetect();
+            }
+
             /**
              * no autobuild, all OPENCV_PATHS_ENV should be defined
              */

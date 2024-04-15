@@ -4,6 +4,22 @@ import { highlight } from "../utils";
 
 export const summery = new Set<string>();
 
+
+export function applyDetect(): void {
+  const {OPENCV_BIN_DIR, OPENCV_LIB_DIR, OPENCV_INCLUDE_DIR} = detect();
+  process.env.OPENCV_BIN_DIR = OPENCV_BIN_DIR;
+  process.env.OPENCV_LIB_DIR = OPENCV_LIB_DIR;
+  process.env.OPENCV_INCLUDE_DIR = OPENCV_INCLUDE_DIR;
+}
+
+
+export function detect(): {OPENCV_BIN_DIR: string, OPENCV_LIB_DIR: string, OPENCV_INCLUDE_DIR: string} {
+  const OPENCV_BIN_DIR = detectBinDir();
+  const OPENCV_LIB_DIR = detectLibDir();
+  const OPENCV_INCLUDE_DIR = detectIncludeDir();
+  return {OPENCV_BIN_DIR, OPENCV_LIB_DIR, OPENCV_INCLUDE_DIR};
+}
+
 // detect_OPENCV_BIN_DIR
 // detect_OPENCV_LIB_DIR
 // detect_OPENCV_INCLUDE_DIR
