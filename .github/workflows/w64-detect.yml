@@ -1,4 +1,4 @@
-name: detect openCV from Chocolatey
+name: Use openCV from Chocolatey
 on:
    push:
      branches: [ "never", "test" ]
@@ -19,8 +19,6 @@ jobs:
     env:
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     steps:
-    #- name: Install cmake
-    #  run: sudo apt-get install -y cmake
     - uses: actions/checkout@v3
     - uses: pnpm/action-setup@v2
       with:
@@ -28,9 +26,11 @@ jobs:
         run_install: |
          - recursive: true
            args: [--frozen-lockfile, --strict-peer-dependencies]
-    - name: Install OpenCV
+
+    - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
         choco install OpenCV -y --version ${{ matrix.opencv_version }}
+
     - name: Use Node.js 20
       uses: actions/setup-node@v3
       with:
@@ -38,6 +38,6 @@ jobs:
         cache: 'pnpm'
     - run: pnpm run build
     #  --prebuild=latestBuild
-    - name: start bin/main.js in verbose
+    - name: Detect OpenCV
       run: node bin/main.js --verbose
     - run: pnpm test

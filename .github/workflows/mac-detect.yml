@@ -15,14 +15,10 @@ jobs:
         # node-version: [14.x, 16.x, 18.x]
         opencv_version:
           - 4
+
     env:
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-      OPENCV_BIN_DIR: .
     steps:
-    - name: Install OpenCV ${{ matrix.opencv_version }}
-      run: |
-        brew install opencv@${{ matrix.opencv_version }}
-
     - uses: actions/checkout@v3
     - uses: pnpm/action-setup@v2
       with:
@@ -31,6 +27,10 @@ jobs:
          - recursive: true
            args: [--frozen-lockfile, --strict-peer-dependencies]
 
+    - name: Install OpenCV ${{ matrix.opencv_version }}
+      run: |
+        brew install opencv@${{ matrix.opencv_version }}
+
     - name: Use Node.js 20
       uses: actions/setup-node@v3
       with:
@@ -38,5 +38,6 @@ jobs:
         cache: 'pnpm'
     - run: pnpm run build
     #  --prebuild=latestBuild
-    - run: node bin/main.js --verbose
+    - name: Detect OpenCV
+      run: node bin/main.js --verbose
     - run: pnpm test

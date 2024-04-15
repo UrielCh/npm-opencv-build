@@ -330,10 +330,11 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         // try to build a new openCV or use a prebuilt one
         if (this.no_autobuild) {
             this.opencvVersion = '0.0.0';
+            OpenCVBuildEnv.log('info', 'init', `no_autobuild is set.`);
             OpenCVBuildEnv.autoLocatePrebuild();
         } else {
             this.opencvVersion = this.getExpectedVersion();
-            OpenCVBuildEnv.log('info', 'init', `using openCV verison ${formatNumber(this.opencvVersion)}`)
+            OpenCVBuildEnv.log('info', 'init', `using openCV verison ${formatNumber(this.opencvVersion)}`);
 
             if (process.env.INIT_CWD) {
                 OpenCVBuildEnv.log('info', 'init', `${highlight("INIT_CWD")} is defined overwriting root path to ${highlight(process.env.INIT_CWD)}`)
