@@ -30,11 +30,8 @@ jobs:
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
         brew install opencv@${{ matrix.opencv_version }}
-    - name: find /opt/homebrew/Cellar/opencv/
-      run: find /opt/homebrew/Cellar/opencv/
-    - name: List /opt/homebrew/Cellar/opencv/*
-      run: ls -l /opt/homebrew/Cellar/opencv/*
-
+    - name: find /usr/local/Cellar/opencv/
+      run: find /usr/local/Cellar/opencv/
     - name: Use Node.js 20
       uses: actions/setup-node@v3
       with:
