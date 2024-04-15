@@ -1,4 +1,4 @@
-name: detect openCV from MacOS Brew no AUTOBUILD
+name: Use OpenCV from Brew
 on:
    push:
      branches: [ "never", "master", "test" ]
