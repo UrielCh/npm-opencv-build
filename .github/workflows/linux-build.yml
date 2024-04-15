@@ -2,7 +2,7 @@ name: build openCV
 
 on:
   push:
-    branches: [ "master", "piercus" ]
+    branches: [ "master", "piercus", "test" ]
     paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-build.yml' ]
   pull_request:
     branches: [ "master", "piercus" ]
