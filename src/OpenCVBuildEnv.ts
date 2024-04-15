@@ -331,7 +331,8 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         if (this.no_autobuild) {
             this.opencvVersion = '0.0.0';
             OpenCVBuildEnv.log('info', 'init', `no_autobuild is set.`);
-            OpenCVBuildEnv.autoLocatePrebuild();
+            const changes = OpenCVBuildEnv.autoLocatePrebuild();
+            OpenCVBuildEnv.log('info', 'init', changes.summery.join('\n'));
         } else {
             this.opencvVersion = this.getExpectedVersion();
             OpenCVBuildEnv.log('info', 'init', `using openCV verison ${formatNumber(this.opencvVersion)}`);
@@ -404,20 +405,26 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             /**
              * no autobuild, all OPENCV_PATHS_ENV should be defined
              */
+            const errors = [];
             for (const varname of OPENCV_PATHS_ENV) {
                 const value = process.env[varname];
                 if (!value) {
-                    throw new Error(`${varname} must be define if auto-build is disabled, and autodetection failed`);
+                    errors.push(`${varname} must be define if auto-build is disabled, and autodetection failed`);
+                    continue;
                 }
                 let stats: Stats;
                 try {
                     stats = fs.statSync(value);
                 } catch (e) {
-                    throw new Error(`${varname} is set to non existing "${value}"`);
+                    errors.push(`${varname} is set to non existing "${value}"`);
+                    continue;
                 }
                 if (!stats.isDirectory()) {
-                    throw new Error(`${varname} is set to "${value}", that should be a directory`);
+                    errors.push(`${varname} is set to "${value}", that should be a directory`);
                 }
+            }
+            if (errors.length) {
+                throw Error(errors.join('\n'));
             }
         }
     }
