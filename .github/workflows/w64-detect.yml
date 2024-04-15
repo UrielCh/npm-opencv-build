@@ -16,6 +16,8 @@ jobs:
         opencv_version:
           - 4.9.0
           - 4.6.0
+    env:
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     steps:
     #- name: Install cmake
     #  run: sudo apt-get install -y cmake
