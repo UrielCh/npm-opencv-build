@@ -424,7 +424,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
                 }
             }
             if (errors.length) {
-                throw Error(errors.join('\n'));
+                throw Error([...errors, ...detector.summery].join('\n'));
             }
         }
     }
