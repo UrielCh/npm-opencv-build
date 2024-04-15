@@ -6,6 +6,7 @@ import { SetupOpencv } from './setupOpencv';
 import { Constant } from './constants';
 import OpenCVBuildEnv from './OpenCVBuildEnv';
 import { args2Option, genHelp, OpenCVBuildEnvParams, OPENCV_PATHS_ENV } from './misc';
+import npmlog from 'npmlog';
 
 export class OpenCVBuilder {
   public readonly constant: Constant;
@@ -15,6 +16,9 @@ export class OpenCVBuilder {
   constructor(opts?: OpenCVBuildEnv | OpenCVBuildEnvParams | string[]) {
     if (Array.isArray(opts)) {
       opts = args2Option(opts);
+      if (opts.verbose) {
+        npmlog.level === 'verbose';
+      }
       if (opts.extra && (opts.extra.help || opts.extra.h)) {
         console.log('npm-opencv-build usage:')
         console.log(genHelp())

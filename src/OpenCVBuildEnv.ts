@@ -297,6 +297,14 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             this.isWithoutContrib = autoBuildFile.env.isWithoutContrib;
             this.opencvVersion = autoBuildFile.env.opencvVersion;
             this.buildRoot = autoBuildFile.env.buildRoot;
+
+            OpenCVBuildEnv.log('debug', 'OpenCVBuildEnv', `autoBuildFlags=${highlight(this.autoBuildFlags)}`)
+            OpenCVBuildEnv.log('debug', 'OpenCVBuildEnv', `buildWithCuda=${highlight(""+(!!this.buildWithCuda))}`)
+            OpenCVBuildEnv.log('debug', 'OpenCVBuildEnv', `isAutoBuildDisabled=${highlight("" + (this.isAutoBuildDisabled))}`)
+            OpenCVBuildEnv.log('debug', 'OpenCVBuildEnv', `isWithoutContrib=${highlight("" + (!!this.isWithoutContrib))}`)
+            OpenCVBuildEnv.log('debug', 'OpenCVBuildEnv', `opencvVersion=${highlight(this.opencvVersion)}`)
+            OpenCVBuildEnv.log('debug', 'OpenCVBuildEnv', `buildRoot=${highlight(this.buildRoot)}`)
+
             if (!this.opencvVersion) {
                 throw Error(`autobuild file is corrupted, opencvVersion is missing in ${builds[0].autobuild}`);
             }

@@ -7,6 +7,7 @@ export interface OpenCVBuildEnvParamsBool {
     autoBuildWithoutContrib?: boolean;
     disableAutoBuild?: boolean;
     keepsources?: boolean;
+    verbose?: boolean;
     'dry-run'?: boolean;
     'git-cache'?: boolean;
 }
@@ -89,6 +90,7 @@ export const OPENCV_PATHS_ENV = ['OPENCV_BIN_DIR', 'OPENCV_INCLUDE_DIR', 'OPENCV
  */
 export const ALLARGS = {
     version: { arg: 'version', conf: 'autoBuildOpencvVersion', env: 'OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION', isBool: false, doc: 'OpenCV version' } as ArgInfo,
+    verbose: { arg: 'verbose', isBool: false, doc: 'verbose' } as ArgInfo,
     flags: { arg: 'flags', conf: 'autoBuildFlags', env: 'OPENCV4NODEJS_AUTOBUILD_FLAGS', isBool: false, doc: 'OpenCV cMake Build flags' } as ArgInfo,
     root: { arg: 'root', conf: 'rootcwd', env: 'INIT_CWD', isBool: false, doc: 'OpenCV-build root directory (deprecated)' } as ArgInfo,
     prebuild: { arg: 'prebuild', conf: 'prebuild', env: 'OPENCV_PREBUILD', isBool: false, doc: 'force prebuild param: latestBuild|latestVersion|oldestBuild|oldestVersion' } as ArgInfo,
@@ -152,6 +154,7 @@ export const args2Option = (args: string[]): OpenCVBuildEnvParams => {
             out[info.conf as stringKey] = val;
     }
     // encvIncludeDir?: string;
+    // console.log(out);
     return out
 }
 

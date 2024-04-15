@@ -10,3 +10,5 @@ dist/cjs/*.js
 dist/cjs/*.ts
 dist/cjs/*.map
 latest
+dist/esm/helper
+dist/cjs/helper
