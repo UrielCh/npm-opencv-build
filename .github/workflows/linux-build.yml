@@ -8,8 +8,8 @@ on:
     branches: [ "master", "piercus" ]
     paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-build.yml' ]
 
-env:
-  OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION : 4.7.0
+#env:
+#  OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION : 4.7.0
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         # node-version: [14.x, 16.x, 18.x]
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -38,5 +38,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
     - run: pnpm run build
-    - run: node bin/main.js --version 4.7.0
+    - name: node bin/main.js --version 4.7.0
+      run: node bin/main.js 
     - run: pnpm test

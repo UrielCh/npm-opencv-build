@@ -26,12 +26,9 @@ jobs:
         run_install: |
          - recursive: true
            args: [--frozen-lockfile, --strict-peer-dependencies]
-
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
         brew install opencv@${{ matrix.opencv_version }}
-    - name: find /usr/local/Cellar/opencv/
-      run: find /usr/local/Cellar/opencv/
     - name: Use Node.js 20
       uses: actions/setup-node@v3
       with:
