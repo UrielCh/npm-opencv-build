@@ -170,15 +170,16 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
     }
 
 
-    private getExpectedVersion(): string {
+    private getExpectedVersion(defaultVersion?: string): string {
         if (this.no_autobuild) {
             return '0.0.0';
         }
         const opencvVersion = this.resolveValue(ALLARGS.version);
         if (opencvVersion)
             return opencvVersion;
-        return '0.0.0'; //DEFAULT_OPENCV_VERSION;
-    }
+        return defaultVersion || "";
+        // return '0.0.0'; //DEFAULT_OPENCV_VERSION;
+        }
 
     // private getExpectedBuildWithCuda(): boolean {
     //     return !!this.resolveValue(ALLARGS.cuda);
@@ -235,7 +236,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             if (!builds.length) {
                 throw Error(`No build found in ${this.rootDir} you should launch opencv-build-npm once`);
             }
-            const expVer = this.getExpectedVersion();
+            const expVer = this.getExpectedVersion("0.0.0");
             /**
              * try to match the expected version
              */
@@ -334,7 +335,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             const changes = OpenCVBuildEnv.autoLocatePrebuild();
             OpenCVBuildEnv.log('info', 'init', changes.summery.join('\n'));
         } else {
-            this.opencvVersion = this.getExpectedVersion();
+            this.opencvVersion = this.getExpectedVersion("4.9.0");
             OpenCVBuildEnv.log('info', 'init', `using openCV verison ${formatNumber(this.opencvVersion)}`);
 
             if (process.env.INIT_CWD) {
