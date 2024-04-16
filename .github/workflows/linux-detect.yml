@@ -1,14 +1,14 @@
-name: Use OpenCV from Brew
+name: Use OpenCV from Ubuntu apt
 on:
    push:
      branches: [ "never", "master", "test" ]
-     paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/mac-detect.yml' ]
+     paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -29,7 +29,8 @@ jobs:
            
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
-        brew install opencv@${{ matrix.opencv_version }}
+        sudo apt update
+        sudo apt install libopencv-dev
     - name: Use Node.js 20
       uses: actions/setup-node@v3
       with:
