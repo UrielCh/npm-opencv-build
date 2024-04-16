@@ -1,7 +1,9 @@
 # Changelog
 
-## V 0.8.5
-- restor he npmjs package glob
+## V 0.9.0
+- restore the npmjs package glob
+- improve MacOS Brew detection
+- use existing openCV by default
 
 ## V 0.8.4
 - npmlog can now be disabled
