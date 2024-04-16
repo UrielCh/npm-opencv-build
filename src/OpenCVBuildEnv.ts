@@ -23,6 +23,14 @@ function toBool(value?: string | null) {
     return true;
 }
 
+interface BuildDesc {
+    autobuild: string;
+    buildInfo: AutoBuildFile;
+    dir: string;
+    hash: string;
+    date: Date;
+}
+
 // const DEFAULT_OPENCV_VERSION = '4.6.0';
 
 export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString {
@@ -99,14 +107,19 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
      * @param rootDir build directory
      * @returns builds list
      */
-    public static listBuild(rootDir: string): Array<{ autobuild: string, buildInfo: AutoBuildFile, dir: string, hash: string, date: Date }> {
+    public static listBuild(rootDir: string): Array<BuildDesc> {
         const versions = fs.readdirSync(rootDir)
             .filter(n => n.startsWith('opencv-'))
             .map((dir) => {
                 const autobuild = path.join(rootDir, dir, 'auto-build.json');
-                const hash = dir.replace(/^opencv-.+-/, '-');
-                const buildInfo = OpenCVBuildEnv.readAutoBuildFile(autobuild, true) as AutoBuildFile;
-                return { autobuild, dir, hash, buildInfo, date: fs.statSync(autobuild).mtime }
+                try {
+                    const stats = fs.statSync(autobuild);
+                    const hash = dir.replace(/^opencv-.+-/, '-');
+                    const buildInfo = OpenCVBuildEnv.readAutoBuildFile(autobuild, true) as AutoBuildFile;
+                    return { autobuild, dir, hash, buildInfo, date: stats.mtime };
+                } catch (err) {
+                    return { autobuild, dir, hash: '', buildInfo: null, date: 0 } as unknown as BuildDesc;
+                }
             })
             .filter((n) => n.buildInfo)
         return versions;

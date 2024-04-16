@@ -1,5 +1,8 @@
 # Changelog
 
+## V 0.9.1
+- fix error in OpenCVBuildEnv.listBuild
+
 ## V 0.9.0
 - restore the npmjs package glob
 - improve MacOS Brew detection
