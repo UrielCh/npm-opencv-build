@@ -16,7 +16,7 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf build",
+    "clean": "rimraf dist/{cjs,esm}/*.{js,d.ts,map} dist/{cjs,esm}/helper",
     "build": "tsc --pretty --project . && tsc --pretty --project tsconfig-cjs.json",
     "build3x": "npm run build && node bin/main.js --keepsource",
     "install_macm1": "npm run build && node bin/main.js --version 4.5.5 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\"",

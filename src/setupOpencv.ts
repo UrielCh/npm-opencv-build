@@ -1,12 +1,12 @@
 import fs from 'fs';
 import { EOL } from 'os';
-import { OpenCVBuilder } from './OpenCVBuilder.js';
-import { findMSBuild, PathVersion } from './findMsBuild.js';
-import type { AutoBuildFile } from './types.js';
-import { formatNumber, formatRed, highlight, protect, spawn, toExecCmd } from './utils.js';
+import { OpenCVBuilder } from './OpenCVBuilder';
+import { findMSBuild, PathVersion } from './findMsBuild';
+import type { AutoBuildFile } from './types';
+import { formatNumber, formatRed, highlight, protect, spawn, toExecCmd } from './utils';
 import log from 'npmlog';
 import rimraf from 'rimraf';
-import { OPENCV_PATHS_ENV } from './misc.js';
+import { OPENCV_PATHS_ENV } from './misc';
 import path from 'path';
 
 export class SetupOpencv {

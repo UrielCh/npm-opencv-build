@@ -1,8 +1,8 @@
-import OpenCVBuilder from './OpenCVBuilder.js';
-import type { OpencvModule } from './types.js';
+import OpenCVBuilder from './OpenCVBuilder';
+import type { OpencvModule } from './types';
 import fs from 'fs';
 import path from 'path';
-import { OpencvModulesType } from './misc.js';
+import { OpencvModulesType } from './misc';
 
 export class getLibsFactory {
   libFiles: string[] = [];

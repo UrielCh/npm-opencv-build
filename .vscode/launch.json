@@ -53,14 +53,19 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "install 4.5.3",
-            "program": "${workspaceFolder}/bin/main.js",
+            "name": "bin/main.ts",
+            "program": "${workspaceFolder}/bin/main.ts",
+            "args": ["--prebuild=latestBuild", "--verbose"],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": ["${workspaceFolder}/lib/**/*.js"],
+            "runtimeArgs": ["-r", "ts-node/register"],
             "env": {
-                "OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION": "4.5.3",
+                "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig-cjs.json",
+                "OPENCV4NODEJS_DISABLE_AUTOBUILD": "1",
+                "OPENCV_BUILD_ROOT": "",
+                // "OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION": "4.5.3",
                 // "OPENCV4NODEJS_AUTOBUILD_FLAGS": "-DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi,face,text",
-                "OPENCV_GIT_CACHE": "1"
+                // "OPENCV_GIT_CACHE": "1"
             },
             "console": "integratedTerminal"
         },
