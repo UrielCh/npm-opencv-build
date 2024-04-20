@@ -115,8 +115,13 @@ async function requireCmd(cmd: string, hint: string): Promise<string> {
     log.verbose('install', `${cmd}: ${stdout.trim()}`)
     return stdout;
   } catch (err) {
-    const errMessage = `failed to execute ${cmd}, ${hint}, error is: ${err.toString()}`
-    throw new Error(errMessage)
+    let errMessage = `failed to execute ${cmd}, ${hint}, error is: `;
+    if (err instanceof Error) {
+      errMessage += err.toString();
+    } else {
+      errMessage += JSON.stringify(err);
+    }
+    throw new Error(errMessage);
   }
 }
 
@@ -127,7 +132,11 @@ function requireCmdSync(cmd: string, hint: string): string {
     log.verbose('install', `${cmd}: ${stdout.trim()}`)
     return stdout;
   } catch (err) {
-    const errMessage = `failed to execute ${cmd}, ${hint}, error is: ${err.toString()}`
+    let errMessage = `failed to execute ${cmd}, ${hint}, error is: `
+    if (err instanceof Error)
+      errMessage += err.toString();
+    else
+      errMessage += JSON.stringify(err);
     throw new Error(errMessage)
   }
 }

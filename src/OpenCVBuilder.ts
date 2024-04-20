@@ -115,10 +115,11 @@ export class OpenCVBuilder {
       const timeString = date.toISOString().substring(11, 19);
       OpenCVBuildEnv.log('info', 'install', `Total Build Time: ${utils.formatNumber(timeString)}`)
     } catch (err) {
-      if (err.toString)
-        OpenCVBuildEnv.log('error', 'install', err.toString())
-      else
-        OpenCVBuildEnv.log('error', 'install', JSON.stringify(err))
+    if (err instanceof Error) {
+      OpenCVBuildEnv.log('error', 'install', err.toString())
+    } else {
+      OpenCVBuildEnv.log('error', 'install', JSON.stringify(err))
+    }
       process.exit(1)
     }
   }

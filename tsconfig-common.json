@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "traceResolution": false,
+    "moduleResolution": "node",
+    "removeComments": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "target": "ES2019",
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "formatCodeOptions": {
+    "indentSize": 2,
+    "tabSize": 2
+  },
+  "include": [
+    "src"
+  ]
+}

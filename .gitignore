@@ -12,3 +12,4 @@ dist/cjs/*.map
 latest
 dist/esm/helper
 dist/cjs/helper
+dist/types/

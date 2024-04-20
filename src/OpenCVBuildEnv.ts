@@ -81,7 +81,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
     // deprecated directly infer your parameters to the constructor
     public autoBuildFlags: string;
     // legacy path to package.json dir
-    public rootcwd: string;
+    public rootcwd?: string;
     // Path to build all openCV libs
     public buildRoot: string;
     // Path to find package.json legacy option
@@ -145,7 +145,10 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
                 OpenCVBuildEnv.log("info", 'readAutoBuildFile', 'file does not exists: %s', autoBuildFile)
         } catch (err) {
             //if (!quiet)
-            OpenCVBuildEnv.log('error', 'readAutoBuildFile', 'failed to read auto-build.json from: %s, with error: %s', autoBuildFile, err.toString())
+            if (err instanceof Error)
+                OpenCVBuildEnv.log('error', 'readAutoBuildFile', 'failed to read auto-build.json from: %s, with error: %s', autoBuildFile, err.toString())
+            else
+                OpenCVBuildEnv.log('error', 'readAutoBuildFile', 'failed to read auto-build.json from: %s, with error: %s', autoBuildFile, JSON.stringify(err))
         }
         return undefined
     }
@@ -238,8 +241,11 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             if (data)
                 this.#packageEnv = data
         } catch (err) {
-            OpenCVBuildEnv.log('error', 'applyEnvsFromPackageJson', 'failed to parse package.json:')
-            OpenCVBuildEnv.log('error', 'applyEnvsFromPackageJson', err)
+            OpenCVBuildEnv.log('error', 'applyEnvsFromPackageJson', 'failed to parse package.json:');
+            if (err instanceof Error)
+                OpenCVBuildEnv.log('error', 'applyEnvsFromPackageJson', err.toString());
+            else
+                OpenCVBuildEnv.log('error', 'applyEnvsFromPackageJson', JSON.stringify(err));
         }
         // try to use previouse build
         this.no_autobuild = toBool(this.resolveValue(ALLARGS.nobuild)) ? '1' : '';
@@ -368,7 +374,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         if (envKeys.length) {
             // print all imported variables
             OpenCVBuildEnv.log('info', 'applyEnvsFromPackageJson', 'the following opencv4nodejs environment variables are set in the package.json:')
-            envKeys.forEach((key: keyof OpenCVPackageBuildOptions) => OpenCVBuildEnv.log('info', 'applyEnvsFromPackageJson', `${highlight(key)}: ${formatNumber(this.#packageEnv[key] || '')}`))
+            envKeys.forEach((key: string) => OpenCVBuildEnv.log('info', 'applyEnvsFromPackageJson', `${highlight(key)}: ${formatNumber(this.#packageEnv[key as keyof OpenCVPackageBuildOptions] || '')}`))
         }
 
         this.autoBuildFlags = this.resolveValue(ALLARGS.flags);

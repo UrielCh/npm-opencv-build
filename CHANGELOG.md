@@ -1,5 +1,8 @@
 # Changelog
 
+## V 0.9.2
+- improve ESM exports
+
 ## V 0.9.1
 - fix error in OpenCVBuildEnv.listBuild
 
