@@ -1,4 +1,7 @@
-import { OpenCVBuildEnv, type OpenCVBuildEnvParams, OpenCVBuilder } from '../dist/cjs/index'
+//import { type OpenCVBuildEnvParams } from '../dist/types/index'
+import { type OpenCVBuildEnvParams } from '../'
+// import { OpenCVBuildEnv, OpenCVBuilder } from '../dist/cjs/index'
+import { OpenCVBuildEnv, OpenCVBuilder } from '../'
 import chai, { expect } from 'chai'
 // import path from 'path';
 
@@ -10,7 +13,7 @@ export class FakeOpenCVBuildEnv extends OpenCVBuildEnv {
   }
 
   public setPlatform(platform: NodeJS.Platform) {
-      super._platform = platform;
+      super.setPlatform(platform);
   }
 }
 

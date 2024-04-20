@@ -676,6 +676,10 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         return this._platform;
     }
 
+    public setPlatform(p: NodeJS.Platform): void {
+        this._platform = p;
+    }
+
     public get isWin(): boolean {
         return this.platform === 'win32'
     }
