@@ -5,6 +5,5 @@
     "outDir": "dist/esm",
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "dist/types",
   }
 }

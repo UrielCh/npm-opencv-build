@@ -1,5 +1,8 @@
 # Changelog
 
+## V 0.9.3
+- export .d.ts file twice, to avoid ESM / CJS warnings
+
 ## V 0.9.2
 - improve ESM exports
 
