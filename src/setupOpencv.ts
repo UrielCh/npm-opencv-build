@@ -5,7 +5,7 @@ import { findMSBuild, PathVersion } from './findMsBuild';
 import type { AutoBuildFile } from './types';
 import { formatNumber, formatRed, highlight, protect, spawn, toExecCmd } from './utils';
 import log from 'npmlog';
-import rimraf from 'rimraf';
+import { rimraf } from 'rimraf';
 import { OPENCV_PATHS_ENV } from './misc';
 import path from 'path';
 

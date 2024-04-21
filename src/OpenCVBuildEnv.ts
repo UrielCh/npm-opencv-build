@@ -7,7 +7,7 @@ import crypto from 'crypto';
 import { AutoBuildFile, EnvSummery } from './types';
 import { ALLARGS, ArgInfo, MODEULES_MAP, OpenCVBuildEnvParams, OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString, OpencvModulesType, OpenCVPackageBuildOptions, OPENCV_PATHS_ENV } from './misc';
 import { ALL_OPENCV_MODULES } from './misc';
-import pc from 'picocolors'
+import pc from 'picocolors';
 import * as detector from './helper/detect';
 
 function toBool(value?: string | null) {

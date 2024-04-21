@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "traceResolution": false,
-    "moduleResolution": "node",
     "removeComments": false,
     "noImplicitAny": true,
     "noImplicitReturns": true,

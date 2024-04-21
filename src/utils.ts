@@ -3,7 +3,7 @@ import fs from 'fs';
 import { EOL } from 'os';
 import path from 'path';
 import log from 'npmlog';
-import pc from 'picocolors'
+import pc from 'picocolors';
 
 /**
  * excape spaces for shell execution
