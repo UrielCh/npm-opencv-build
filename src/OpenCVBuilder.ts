@@ -1,6 +1,6 @@
+import fs from "node:fs";
 import * as utils from "./utils";
 import type { AutoBuildFile } from "./types";
-import fs from "fs";
 import { getLibsFactory } from "./getLibsFactory";
 import { SetupOpencv } from "./setupOpencv";
 import { Constant } from "./constants";

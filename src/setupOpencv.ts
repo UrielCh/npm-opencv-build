@@ -1,5 +1,5 @@
-import fs from "fs";
-import { EOL } from "os";
+import fs from "node:fs";
+import { EOL } from "node:os";
 import { OpenCVBuilder } from "./OpenCVBuilder";
 import { findMSBuild, PathVersion } from "./findMsBuild";
 import type { AutoBuildFile } from "./types";

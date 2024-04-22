@@ -1,9 +1,9 @@
-import fs, { Stats } from "fs";
-import os from "os";
-import path from "path";
+import fs, { Stats } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import crypto from "node:crypto";
 import log, { LogLevels } from "npmlog";
 import { formatNumber, highlight, isCudaAvailable } from "./utils";
-import crypto from "crypto";
 import { AutoBuildFile, EnvSummery } from "./types";
 import {
   ALLARGS,

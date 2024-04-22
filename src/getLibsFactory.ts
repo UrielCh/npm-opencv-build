@@ -1,7 +1,7 @@
+import fs from "node:fs";
+import path from "node:path";
 import OpenCVBuilder from "./OpenCVBuilder";
 import type { OpencvModule } from "./types";
-import fs from "fs";
-import path from "path";
 import { OpencvModulesType } from "./misc";
 
 export class getLibsFactory {

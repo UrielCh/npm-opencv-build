@@ -1,7 +1,7 @@
-import child_process from "child_process";
-import fs from "fs";
-import { EOL } from "os";
-import path from "path";
+import child_process from "node:child_process";
+import fs from "node:fs";
+import { EOL } from "node:os";
+import path from "node:path";
 import log from "npmlog";
 import pc from "picocolors";
 import { getEnv } from "./env";

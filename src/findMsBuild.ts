@@ -1,7 +1,7 @@
+import path from "node:path";
 import log from "npmlog";
-import { execFile, formatNumber, highlight, light } from "./utils";
-import path from "path";
 import { globSync } from "glob";
+import { execFile, formatNumber, highlight, light } from "./utils";
 import { getEnv } from "./env";
 
 export interface PathVersion {

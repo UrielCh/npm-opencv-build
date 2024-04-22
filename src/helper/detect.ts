@@ -1,5 +1,5 @@
+import fs from "node:fs";
 import { globSync } from "glob";
-import fs from "fs";
 import { highlight } from "../utils";
 import { setEnv } from "../env";
 
