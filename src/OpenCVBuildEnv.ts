@@ -18,8 +18,9 @@ import {
 import { ALL_OPENCV_MODULES } from "./misc";
 import pc from "picocolors";
 import * as detector from "./helper/detect";
-import { getDirname, getEnv, setEnv } from "./env";
+import { getEnv, setEnv } from "./env";
 import Log from "./Log";
+import StaticTools from "./StaticTools"
 
 function toBool(value?: string | null) {
   if (!value) {
@@ -39,14 +40,6 @@ function toBool(value?: string | null) {
     return false;
   }
   return true;
-}
-
-interface BuildDesc {
-  autobuild: string;
-  buildInfo: AutoBuildFile;
-  dir: string;
-  hash: string;
-  date: Date;
 }
 
 // const DEFAULT_OPENCV_VERSION = '4.6.0';
@@ -110,141 +103,6 @@ export default class OpenCVBuildEnv
   protected _platform: NodeJS.Platform;
   private no_autobuild: string;
 
-  /**
-   * Find the proper root dir, this directory will contains all openCV source code and a subfolder per build
-   * @param opts
-   * @returns
-   */
-  public static getBuildDir(opts = {} as OpenCVBuildEnvParams) {
-    let buildRoot = opts.buildRoot || getEnv("OPENCV_BUILD_ROOT") ||
-      path.join(getDirname(), "..");
-    if (buildRoot[0] === "~") {
-      buildRoot = path.join(os.homedir(), buildRoot.slice(1));
-    }
-    return buildRoot;
-  }
-
-  /**
-   * list existing build in the diven directory
-   * @param rootDir build directory
-   * @returns builds list
-   */
-  public static listBuild(rootDir: string): Array<BuildDesc> {
-    const versions = fs.readdirSync(rootDir)
-      .filter((n) => n.startsWith("opencv-"))
-      .map((dir) => {
-        const autobuild = path.join(rootDir, dir, "auto-build.json");
-        try {
-          const stats = fs.statSync(autobuild);
-          const hash = dir.replace(/^opencv-.+-/, "-");
-          const buildInfo = OpenCVBuildEnv.readAutoBuildFile(
-            autobuild,
-            true,
-          ) as AutoBuildFile;
-          return { autobuild, dir, hash, buildInfo, date: stats.mtime };
-        } catch (err) {
-          return {
-            autobuild,
-            dir,
-            hash: "",
-            buildInfo: null,
-            date: 0,
-          } as unknown as BuildDesc;
-        }
-      })
-      .filter((n) => n.buildInfo);
-    return versions;
-  }
-
-  /**
-   * Read a parse an existing autoBuildFile
-   * @param autoBuildFile file path
-   * @returns
-   */
-  public static readAutoBuildFile(
-    autoBuildFile: string,
-    quiet?: boolean,
-  ): AutoBuildFile | undefined {
-    try {
-      const fileExists = fs.existsSync(autoBuildFile);
-      if (fileExists) {
-        const autoBuildFileData = JSON.parse(
-          fs.readFileSync(autoBuildFile).toString(),
-        ) as AutoBuildFile;
-        if (
-          !autoBuildFileData.opencvVersion ||
-          !("autoBuildFlags" in autoBuildFileData) ||
-          !Array.isArray(autoBuildFileData.modules)
-        ) {
-          // if (quiet) return undefined;
-          throw new Error(
-            `auto-build.json has invalid contents, please delete the file: ${autoBuildFile}`,
-          );
-        }
-        return autoBuildFileData;
-      }
-      if (!quiet) {
-        Log.log(
-          "info",
-          "readAutoBuildFile",
-          "file does not exists: %s",
-          autoBuildFile,
-        );
-      }
-    } catch (err) {
-      //if (!quiet)
-      if (err instanceof Error) {
-        Log.log(
-          "error",
-          "readAutoBuildFile",
-          "failed to read auto-build.json from: %s, with error: %s",
-          autoBuildFile,
-          err.toString(),
-        );
-      } else {
-        Log.log(
-          "error",
-          "readAutoBuildFile",
-          "failed to read auto-build.json from: %s, with error: %s",
-          autoBuildFile,
-          JSON.stringify(err),
-        );
-      }
-    }
-    return undefined;
-  }
-
-  /**
-   * autodetect path using common values.
-   * @return number of updated env variable from 0 to 3
-   */
-  public static autoLocatePrebuild(): { changes: number; summery: string[] } {
-    let changes = 0;
-    const summery = [] as string[];
-    if (!getEnv("OPENCV_BIN_DIR")) {
-      const candidate = detector.detectBinDir();
-      if (candidate) {
-        setEnv("OPENCV_BIN_DIR", candidate);
-        changes++;
-      }
-    }
-    if (!getEnv("OPENCV_LIB_DIR")) {
-      const candidate = detector.detectLibDir();
-      if (candidate) {
-        setEnv("OPENCV_LIB_DIR", candidate);
-        changes++;
-      }
-    }
-    if (!getEnv("OPENCV_INCLUDE_DIR")) {
-      const candidate = detector.detectIncludeDir();
-      if (candidate) {
-        setEnv("OPENCV_INCLUDE_DIR", candidate);
-        changes++;
-      }
-    }
-    return { changes, summery };
-  }
-
   private getExpectedVersion(defaultVersion?: string): string {
     if (this.no_autobuild) {
       return "0.0.0";
@@ -291,16 +149,16 @@ export default class OpenCVBuildEnv
     this.prebuild = opts.prebuild;
     this._platform = process.platform;
     this.packageRoot = opts.rootcwd || getEnv("INIT_CWD") || process.cwd();
-    this.buildRoot = OpenCVBuildEnv.getBuildDir(opts);
+    this.buildRoot = StaticTools.getBuildDir(opts);
     // get project Root path to looks for package.json for opencv4nodejs section
     try {
-      const data = OpenCVBuildEnv.readEnvsFromPackageJson();
+      const data = StaticTools.readEnvsFromPackageJson();
       if (data === null && !this.prebuild) {
         Log.log(
           "info",
           "config",
           `No file ${highlight("%s")} found for opencv4nodejs import`,
-          OpenCVBuildEnv.getPackageJson(),
+          StaticTools.getPackageJson(),
         );
       }
       if (data) {
@@ -326,7 +184,7 @@ export default class OpenCVBuildEnv
     this.no_autobuild = toBool(this.resolveValue(ALLARGS.nobuild)) ? "1" : "";
 
     if (!this.no_autobuild && opts.prebuild) {
-      const builds = OpenCVBuildEnv.listBuild(this.rootDir);
+      const builds = StaticTools.listBuild(this.rootDir);
       if (!builds.length) {
         throw Error(
           `No build found in ${this.rootDir} you should launch opencv-build-npm once`,
@@ -461,7 +319,7 @@ export default class OpenCVBuildEnv
     if (this.no_autobuild) {
       this.opencvVersion = "0.0.0";
       Log.log("info", "init", `no_autobuild is set.`);
-      const changes = OpenCVBuildEnv.autoLocatePrebuild();
+      const changes = StaticTools.autoLocatePrebuild();
       Log.log("info", "init", changes.summery.join("\n"));
     } else {
       this.opencvVersion = this.getExpectedVersion("4.9.0");
@@ -803,74 +661,10 @@ export default class OpenCVBuildEnv
     };
   }
 
-  private static getPackageJson(): string {
-    return path.resolve(process.cwd(), "package.json");
-  }
-
-  /**
-   * extract opencv4nodejs section from package.json if available
-   */
-  private static parsePackageJson(): {
-    file: string;
-    data: { opencv4nodejs?: { [key: string]: string | boolean | number } };
-  } | null {
-    const absPath = OpenCVBuildEnv.getPackageJson();
-    if (!fs.existsSync(absPath)) {
-      return null;
-    }
-    const data = JSON.parse(fs.readFileSync(absPath).toString());
-    return { file: absPath, data };
-  }
-
   public numberOfCoresAvailable(): number {
     return os.cpus().length;
   }
 
-  private static readEnvsFromPackageJsonLog = 0;
-  /**
-   * get opencv4nodejs section from package.json if available
-   * @returns opencv4nodejs customs
-   */
-  public static readEnvsFromPackageJson(): {
-    [key: string]: string | boolean | number;
-  } | null {
-    const rootPackageJSON = OpenCVBuildEnv.parsePackageJson();
-    if (!rootPackageJSON) {
-      return null;
-    }
-
-    if (!rootPackageJSON.data) {
-      if (!OpenCVBuildEnv.readEnvsFromPackageJsonLog++) {
-        Log.log(
-          "info",
-          "config",
-          `looking for opencv4nodejs option from ${highlight("%s")}`,
-          rootPackageJSON.file,
-        );
-      }
-      return {};
-    }
-    if (!rootPackageJSON.data.opencv4nodejs) {
-      if (!OpenCVBuildEnv.readEnvsFromPackageJsonLog++) {
-        Log.log(
-          "info",
-          "config",
-          `no opencv4nodejs section found in ${highlight("%s")}`,
-          rootPackageJSON.file,
-        );
-      }
-      return {};
-    }
-    if (!OpenCVBuildEnv.readEnvsFromPackageJsonLog++) {
-      Log.log(
-        "info",
-        "config",
-        `found opencv4nodejs section in ${highlight("%s")}`,
-        rootPackageJSON.file,
-      );
-    }
-    return rootPackageJSON.data.opencv4nodejs;
-  }
   private hash = "";
   /**
    * openCV uniq version prostfix, used to avoid build path colision.
@@ -974,6 +768,6 @@ export default class OpenCVBuildEnv
     }
   }
   public readAutoBuildFile(): AutoBuildFile | undefined {
-    return OpenCVBuildEnv.readAutoBuildFile(this.autoBuildFile);
+    return StaticTools.readAutoBuildFile(this.autoBuildFile);
   }
 }
