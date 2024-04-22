@@ -6,18 +6,21 @@ import { setEnv } from "../env";
 export const summery = new Set<string>();
 
 export function applyDetect(): void {
-  const {OPENCV_BIN_DIR, OPENCV_LIB_DIR, OPENCV_INCLUDE_DIR} = detect();
-  setEnv('OPENCV_BIN_DIR', OPENCV_BIN_DIR);
-  setEnv('OPENCV_LIB_DIR', OPENCV_LIB_DIR);
-  setEnv('OPENCV_INCLUDE_DIR', OPENCV_INCLUDE_DIR);
+  const { OPENCV_BIN_DIR, OPENCV_LIB_DIR, OPENCV_INCLUDE_DIR } = detect();
+  setEnv("OPENCV_BIN_DIR", OPENCV_BIN_DIR);
+  setEnv("OPENCV_LIB_DIR", OPENCV_LIB_DIR);
+  setEnv("OPENCV_INCLUDE_DIR", OPENCV_INCLUDE_DIR);
 }
 
-
-export function detect(): {OPENCV_BIN_DIR: string, OPENCV_LIB_DIR: string, OPENCV_INCLUDE_DIR: string} {
+export function detect(): {
+  OPENCV_BIN_DIR: string;
+  OPENCV_LIB_DIR: string;
+  OPENCV_INCLUDE_DIR: string;
+} {
   const OPENCV_BIN_DIR = detectBinDir();
   const OPENCV_LIB_DIR = detectLibDir();
   const OPENCV_INCLUDE_DIR = detectIncludeDir();
-  return {OPENCV_BIN_DIR, OPENCV_LIB_DIR, OPENCV_INCLUDE_DIR};
+  return { OPENCV_BIN_DIR, OPENCV_LIB_DIR, OPENCV_INCLUDE_DIR };
 }
 
 // detect_OPENCV_BIN_DIR
@@ -55,12 +58,15 @@ export function detectBinDir(): string {
       summery.add(`failed to resolve OPENCV_BIN_DIR from ${candidate}`);
     }
   } else if (os === "darwin") {
-    const lookups = ["/opt/homebrew/Cellar/opencv/*/bin","/usr/local/Cellar/opencv/*/bin"];
+    const lookups = [
+      "/opt/homebrew/Cellar/opencv/*/bin",
+      "/usr/local/Cellar/opencv/*/bin",
+    ];
     const candidates = [...globSync(lookups[0]), ...globSync(lookups[1])];
     if (candidates.length > 1) {
-        summery.add(
-            `homebrew detection found more than one openCV in ${lookups.join(",")}`,
-          );
+      summery.add(
+        `homebrew detection found more than one openCV in ${lookups.join(",")}`,
+      );
     }
     if (candidates.length) {
       const candidate = candidates[0];
@@ -100,26 +106,29 @@ export function detectLibDir(): string {
     //const [candidate] = fs.readdirSync('/usr/lib/').filter((a: string) => a.endsWith('-linux-gnu')).map(a => `/usr/lib/${a}`);
     const [candidate] = globSync(lookup);
     if (candidate) {
-        summery.add(`OPENCV_LIB_DIR resolved as ${candidate}`);
-        return candidate;
+      summery.add(`OPENCV_LIB_DIR resolved as ${candidate}`);
+      return candidate;
     } else {
       summery.add(`failed to resolve OPENCV_LIB_DIR from ${lookup}`);
     }
   } else if (os === "darwin") {
-    const lookups = ["/opt/homebrew/Cellar/opencv/*/lib","/usr/local/Cellar/opencv/*/lib"];
+    const lookups = [
+      "/opt/homebrew/Cellar/opencv/*/lib",
+      "/usr/local/Cellar/opencv/*/lib",
+    ];
     const candidates = [...globSync(lookups[0]), ...globSync(lookups[1])];
-      if (candidates.length > 1) {
-        summery.add(
-          `homebrew detection found more than one openCV in ${lookups.join(',')}`,
-        );
-      }
-      if (candidates.length) {
-        const candidate = candidates[0];
-        summery.add(`OPENCV_LIB_DIR resolved as ${candidate}`);
-        return candidate;
-      } else {
-        summery.add(`failed to resolve OPENCV_BIN_DIR from ${lookups.join(',')}`);
-      }
+    if (candidates.length > 1) {
+      summery.add(
+        `homebrew detection found more than one openCV in ${lookups.join(",")}`,
+      );
+    }
+    if (candidates.length) {
+      const candidate = candidates[0];
+      summery.add(`OPENCV_LIB_DIR resolved as ${candidate}`);
+      return candidate;
+    } else {
+      summery.add(`failed to resolve OPENCV_BIN_DIR from ${lookups.join(",")}`);
+    }
   }
   return "";
 }
@@ -127,27 +136,30 @@ export function detectLibDir(): string {
 /**
  * detect OPENCV_INCLUDE_DIR
  */
-export function detectIncludeDir() : string {
+export function detectIncludeDir(): string {
   const os = process.platform;
   if (os === "win32") {
     // chocolatey
     const candidate = "c:\\tools\\opencv\\build\\include";
     if (fs.existsSync(candidate)) {
-      summery.add('OPENCV_INCLUDE_DIR resolved');
+      summery.add("OPENCV_INCLUDE_DIR resolved");
       return candidate;
-  } else {
+    } else {
       summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
-  }
+    }
   } else if (os === "linux") {
-    const candidate = "/usr/include/opencv4/"
+    const candidate = "/usr/include/opencv4/";
     if (fs.existsSync(candidate)) {
       summery.add(`OPENCV_INCLUDE_DIR resolved as ${candidate}`);
       return candidate;
     } else {
-        summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
+      summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
     }
   } else if (os === "darwin") {
-    const lookups = ["/opt/homebrew/Cellar/opencv/*/include","/usr/local/Cellar/opencv/*/include"];
+    const lookups = [
+      "/opt/homebrew/Cellar/opencv/*/include",
+      "/usr/local/Cellar/opencv/*/include",
+    ];
     const candidates = [...globSync(lookups[0]), ...globSync(lookups[1])];
     if (candidates.length > 1) {
       summery.add(
@@ -159,7 +171,9 @@ export function detectIncludeDir() : string {
       summery.add(`OPENCV_INCLUDE_DIR resolved as ${candidate}`);
       return candidate;
     } else {
-      summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${lookups.join(",")}`);
+      summery.add(
+        `failed to resolve OPENCV_INCLUDE_DIR from ${lookups.join(",")}`,
+      );
     }
   }
   return "";

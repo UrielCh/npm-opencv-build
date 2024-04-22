@@ -1,11 +1,10 @@
 {
-    "extends": "./tsconfig-common.json",
-    "compilerOptions": {
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "outDir": "dist/cjs",
-      "declaration": true,
-      "declarationMap": true,
-      }
+  "extends": "./tsconfig-common.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist/cjs",
+    "declaration": true,
+    "declarationMap": true
   }
-  
+}

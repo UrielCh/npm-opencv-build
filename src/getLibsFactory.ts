@@ -1,8 +1,8 @@
-import OpenCVBuilder from './OpenCVBuilder';
-import type { OpencvModule } from './types';
-import fs from 'fs';
-import path from 'path';
-import { OpencvModulesType } from './misc';
+import OpenCVBuilder from "./OpenCVBuilder";
+import type { OpencvModule } from "./types";
+import fs from "fs";
+import path from "path";
+import { OpencvModulesType } from "./misc";
 
 export class getLibsFactory {
   libFiles: string[] = [];
@@ -16,10 +16,11 @@ export class getLibsFactory {
    * @returns files in lib directory
    */
   private listFiles(): string[] {
-    if (this.libFiles && this.libFiles.length)
+    if (this.libFiles && this.libFiles.length) {
       return this.libFiles;
+    }
     const libDir = this.builder.env.opencvLibDir;
-    this.libFiles = fs.readdirSync(libDir)
+    this.libFiles = fs.readdirSync(libDir);
     return this.libFiles;
   }
 
@@ -28,31 +29,32 @@ export class getLibsFactory {
    * @returns current OS prefix
    */
   get getLibPrefix(): string {
-    return this.builder.env.isWin ? 'opencv_' : 'libopencv_'
+    return this.builder.env.isWin ? "opencv_" : "libopencv_";
   }
 
   /**
    * @returns lib extention based on current OS
    */
-  get getLibSuffix(): 'lib' | 'dylib' | 'so' {
+  get getLibSuffix(): "lib" | "dylib" | "so" {
     switch (this.builder.env.platform) {
-      case 'win32':
-        return 'lib'
-      case 'darwin':
-        return 'dylib'
+      case "win32":
+        return "lib";
+      case "darwin":
+        return "dylib";
       default:
-        return 'so'
+        return "so";
     }
   }
 
   /**
    * build a regexp matching os lib file
-   * @param opencvModuleName 
-   * @returns 
+   * @param opencvModuleName
+   * @returns
    */
   getLibNameRegex(opencvModuleName: string): RegExp {
-    const regexp = `^${this.getLibPrefix}${opencvModuleName}[0-9.]*\\.${this.getLibSuffix}$`;
-    return new RegExp(regexp)
+    const regexp =
+      `^${this.getLibPrefix}${opencvModuleName}[0-9.]*\\.${this.getLibSuffix}$`;
+    return new RegExp(regexp);
   }
 
   /**
@@ -70,44 +72,54 @@ export class getLibsFactory {
    * @param libFiles files in lib directory
    * @returns full path to looked up lib file
    */
-  public matchLib(opencvModuleName: string, libDir: string, libFiles: string[]): string {
+  public matchLib(
+    opencvModuleName: string,
+    libDir: string,
+    libFiles: string[],
+  ): string {
     const regexp = this.getLibNameRegex(opencvModuleName);
-    const match = libFiles.find((libFile: string) => !!(libFile.match(regexp) || [])[0]);
-    if (!match)
-      return '';
+    const match = libFiles.find((libFile: string) =>
+      !!(libFile.match(regexp) || [])[0]
+    );
+    if (!match) {
+      return "";
+    }
     let fullpath = path.resolve(libDir, match);
-    if (this.syncPath)
-      fullpath = fs.realpathSync(fullpath)
-    return fullpath
+    if (this.syncPath) {
+      fullpath = fs.realpathSync(fullpath);
+    }
+    return fullpath;
   }
 
   getLibs(): OpencvModule[] {
     const libDir = this.builder.env.opencvLibDir;
     if (!fs.existsSync(libDir)) {
-      throw new Error(`specified lib dir does not exist: ${libDir}`)
+      throw new Error(`specified lib dir does not exist: ${libDir}`);
     }
 
     const modules: OpencvModule[] = [];
-    const worldModule = 'world';
-    const worldLibPath = this.resolveLib(worldModule)
+    const worldModule = "world";
+    const worldLibPath = this.resolveLib(worldModule);
     if (worldLibPath) {
       modules.push({
         opencvModule: worldModule,
         libPath: worldLibPath,
       });
     }
-    
+
     const extra = [...this.builder.env.enabledModules].map(
       (opencvModule: OpencvModulesType) => ({
         opencvModule,
         libPath: this.resolveLib(opencvModule),
-      })
-    )
+      }),
+    );
     for (const m of extra) {
-      if (m.opencvModule === 'world')
+      if (m.opencvModule === "world") {
         continue;
-      if (m.libPath)
+      }
+      if (m.libPath) {
         modules.push(m);
+      }
     }
     return modules;
   }
