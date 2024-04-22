@@ -13,19 +13,17 @@ export function setEnv(name: string, value: string): void {
 
 export function getDirname(): string {
   // return __dirname if it's a nodejs script
-  if (typeof __dirname !== "undefined") {
-    return __dirname;
-  }
+  // if (typeof __dirname !== "undefined") {
+  return __dirname;
+  // }
   // return import.meta.url if it's a module
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore ESM code
-  return new URL(".", import.meta.url).pathname;
+  //return new URL(".", import.meta.url).pathname;
 }
 
 export class Platfrm {
   public static theOS: string = process.platform; //Deno.build.os;
 
-  public static changeOS(os: "windows" | "linux" | "darwin") {
+  public static changeOS(os: "windows" | "linux" | "darwin" | string) {
     Platfrm.theOS = os;
   }
   public static get isWindows() {
@@ -37,4 +35,8 @@ export class Platfrm {
   public static get isMac() {
     return Platfrm.theOS === "darwin";
   }
+}
+
+export function getArch(): string {
+  return process.arch;
 }

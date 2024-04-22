@@ -15,7 +15,7 @@ import log from "npmlog";
 import { rimraf } from "rimraf";
 import { OPENCV_PATHS_ENV } from "./misc";
 import path from "path";
-import { getEnv, Platfrm } from "./env";
+import { getArch, getEnv, Platfrm } from "./env";
 
 export class SetupOpencv {
   constructor(private readonly builder: OpenCVBuilder) {}
@@ -24,7 +24,7 @@ export class SetupOpencv {
     return [
       sln,
       "/p:Configuration=Release",
-      `/p:Platform=${process.arch === "x64" ? "x64" : "x86"}`,
+      `/p:Platform=${getArch().includes("64") ? "x64" : "x86"}`,
     ];
   }
 
@@ -74,7 +74,7 @@ export class SetupOpencv {
 
   private getWinCmakeFlags(msversion: string): string[] {
     const cmakeVsCompiler = this.builder.constant.cmakeVsCompilers[msversion];
-    const cmakeArch = this.builder.constant.cmakeArchs[process.arch];
+    const cmakeArch = this.builder.constant.cmakeArchs[getArch()];
 
     if (!cmakeVsCompiler) {
       throw new Error(
@@ -82,7 +82,7 @@ export class SetupOpencv {
       );
     }
     if (!cmakeArch) {
-      throw new Error(`no cmake arch found for process.arch: ${process.arch}`);
+      throw new Error(`no cmake arch found for arch: ${getArch()}`);
     }
 
     let GFlag: string[] = [];
