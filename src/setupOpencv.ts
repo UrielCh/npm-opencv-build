@@ -15,7 +15,7 @@ import log from "npmlog";
 import { rimraf } from "rimraf";
 import { OPENCV_PATHS_ENV } from "./misc";
 import path from "path";
-import { getEnv } from "./env";
+import { getEnv, Platfrm } from "./env";
 
 export class SetupOpencv {
   constructor(private readonly builder: OpenCVBuilder) {}
@@ -104,7 +104,7 @@ export class SetupOpencv {
   }
 
   private async getMsbuildIfWin(): Promise<PathVersion | undefined> {
-    if (this.builder.env.isWin) {
+    if (Platfrm.isWindows) {
       const msbuilds = await findMSBuild();
       if (msbuilds.length > 1) {
         log.warn(
@@ -203,7 +203,7 @@ export class SetupOpencv {
     let cMakeFlags: string[] = [];
     let msbuildPath = "";
     // Get cmake flags here to check for CUDA early on instead of the start of the building process
-    if (env.isWin) {
+    if (Platfrm.isWindows) {
       if (!msbuild) {
         throw Error("Error getting Ms Build info");
       }
@@ -235,7 +235,7 @@ export class SetupOpencv {
       for (const k of OPENCV_PATHS_ENV) {
         const v = getEnv(k);
         if (v) {
-          const setEnv = (process.platform === "win32") ? "$Env:" : "export ";
+          const setEnv = Platfrm.isWindows ? "$Env:" : "export ";
           this.execLog.push(`${setEnv}${k}=${protect(v)}`);
         }
       }

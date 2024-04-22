@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { globSync } from "glob";
 import { highlight } from "../utils";
-import { setEnv } from "../env";
+import { Platfrm, setEnv } from "../env";
 
 export const summery = new Set<string>();
 
@@ -28,9 +28,8 @@ export function detect(): {
 // detect_OPENCV_INCLUDE_DIR
 
 export function detectBinDir(): string {
-  const os = process.platform;
   // chocolatey
-  if (os === "win32") {
+  if (Platfrm.isWindows) {
     const lookup = "c:/tools/opencv/build/x64/vc*/bin";
     // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\bin", "c:\\tools\\opencv\\build\\x64\\vc16\\bin"];
     const candidates = globSync(lookup);
@@ -49,7 +48,7 @@ export function detectBinDir(): string {
         }`,
       );
     }
-  } else if (os === "linux") {
+  } else if (Platfrm.isLinux) {
     const candidate = "/usr/bin/";
     if (fs.existsSync(candidate)) {
       summery.add("OPENCV_BIN_DIR resolved");
@@ -57,7 +56,7 @@ export function detectBinDir(): string {
     } else {
       summery.add(`failed to resolve OPENCV_BIN_DIR from ${candidate}`);
     }
-  } else if (os === "darwin") {
+  } else if (Platfrm.isMac) {
     const lookups = [
       "/opt/homebrew/Cellar/opencv/*/bin",
       "/usr/local/Cellar/opencv/*/bin",
@@ -79,8 +78,7 @@ export function detectBinDir(): string {
 }
 
 export function detectLibDir(): string {
-  const os = process.platform;
-  if (os === "win32") {
+  if (Platfrm.isWindows) {
     // chocolatey
     const lookup = "c:/tools/opencv/build/x64/vc*/lib";
     // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\lib", "c:\\tools\\opencv\\build\\x64\\vc16\\lib"]
@@ -100,7 +98,7 @@ export function detectLibDir(): string {
         }`,
       );
     }
-  } else if (os === "linux") {
+  } else if (Platfrm.isLinux) {
     const lookup = "/usr/lib/*-linux-gnu";
     // tiny-blob need to be fix bypassing th issue
     //const [candidate] = fs.readdirSync('/usr/lib/').filter((a: string) => a.endsWith('-linux-gnu')).map(a => `/usr/lib/${a}`);
@@ -111,7 +109,7 @@ export function detectLibDir(): string {
     } else {
       summery.add(`failed to resolve OPENCV_LIB_DIR from ${lookup}`);
     }
-  } else if (os === "darwin") {
+  } else if (Platfrm.isMac) {
     const lookups = [
       "/opt/homebrew/Cellar/opencv/*/lib",
       "/usr/local/Cellar/opencv/*/lib",
@@ -137,8 +135,7 @@ export function detectLibDir(): string {
  * detect OPENCV_INCLUDE_DIR
  */
 export function detectIncludeDir(): string {
-  const os = process.platform;
-  if (os === "win32") {
+  if (Platfrm.isWindows) {
     // chocolatey
     const candidate = "c:\\tools\\opencv\\build\\include";
     if (fs.existsSync(candidate)) {
@@ -147,7 +144,7 @@ export function detectIncludeDir(): string {
     } else {
       summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
     }
-  } else if (os === "linux") {
+  } else if (Platfrm.isLinux) {
     const candidate = "/usr/include/opencv4/";
     if (fs.existsSync(candidate)) {
       summery.add(`OPENCV_INCLUDE_DIR resolved as ${candidate}`);
@@ -155,7 +152,7 @@ export function detectIncludeDir(): string {
     } else {
       summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
     }
-  } else if (os === "darwin") {
+  } else if (Platfrm.isMac) {
     const lookups = [
       "/opt/homebrew/Cellar/opencv/*/include",
       "/usr/local/Cellar/opencv/*/include",

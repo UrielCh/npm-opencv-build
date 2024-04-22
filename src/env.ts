@@ -21,3 +21,22 @@ export function getDirname(): string {
   // @ts-ignore ESM code
   return new URL(".", import.meta.url).pathname;
 }
+
+
+export class Platfrm {
+  public static theOS: string = process.platform;//Deno.build.os;
+
+  public static changeOS(os: "windows" | "linux" | "darwin") {
+    Platfrm.theOS = os;
+  }
+  public static get isWindows() {
+    return Platfrm.theOS.startsWith("win"); //  === 'windows';
+  }
+  public static get isLinux() {
+    return Platfrm.theOS === "linux";
+  }
+  public static get isMac() {
+    return Platfrm.theOS === "darwin";
+  }
+}
+

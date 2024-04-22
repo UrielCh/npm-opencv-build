@@ -3,6 +3,7 @@ import path from "node:path";
 import OpenCVBuilder from "./OpenCVBuilder";
 import type { OpencvModule } from "./types";
 import { OpencvModulesType } from "./misc";
+import { Platfrm } from "./env";
 
 export class getLibsFactory {
   libFiles: string[] = [];
@@ -29,21 +30,18 @@ export class getLibsFactory {
    * @returns current OS prefix
    */
   get getLibPrefix(): string {
-    return this.builder.env.isWin ? "opencv_" : "libopencv_";
+    return Platfrm.isWindows ? "opencv_" : "libopencv_";
   }
 
   /**
    * @returns lib extention based on current OS
    */
   get getLibSuffix(): "lib" | "dylib" | "so" {
-    switch (this.builder.env.platform) {
-      case "win32":
+    if (Platfrm.isWindows)
         return "lib";
-      case "darwin":
+      if (Platfrm.isMac)
         return "dylib";
-      default:
-        return "so";
-    }
+      return "so";
   }
 
   /**

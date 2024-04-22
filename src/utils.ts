@@ -4,7 +4,7 @@ import { EOL } from "node:os";
 import path from "node:path";
 import log from "npmlog";
 import pc from "picocolors";
-import { getEnv } from "./env";
+import { getEnv, Platfrm } from "./env";
 
 /**
  * excape spaces for shell execution
@@ -215,7 +215,7 @@ export function isCudaAvailable(): boolean {
     return cached_cuda;
   }
   log.info("install", "Check if CUDA is available & what version...");
-  if (process.platform == "win32") {
+  if (Platfrm.isWindows) {
     try {
       requireCmdSync("nvcc --version", "CUDA availability check");
       // return true;

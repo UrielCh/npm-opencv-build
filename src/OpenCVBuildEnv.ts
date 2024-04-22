@@ -18,7 +18,7 @@ import {
 import { ALL_OPENCV_MODULES } from "./misc";
 import pc from "picocolors";
 import * as detector from "./helper/detect";
-import { getEnv, setEnv } from "./env";
+import { getEnv, Platfrm, setEnv } from "./env";
 import Log from "./Log";
 import StaticTools from "./StaticTools";
 
@@ -99,7 +99,7 @@ export default class OpenCVBuildEnv
   public buildRoot: string;
   // Path to find package.json legacy option
   public packageRoot: string;
-  protected _platform: NodeJS.Platform;
+  // protected _platform: NodeJS.Platform;
   private no_autobuild: string;
 
   private getExpectedVersion(defaultVersion?: string): string {
@@ -146,7 +146,6 @@ export default class OpenCVBuildEnv
 
   constructor(private opts = {} as OpenCVBuildEnvParams) {
     this.prebuild = opts.prebuild;
-    this._platform = process.platform;
     this.packageRoot = opts.rootcwd || getEnv("INIT_CWD") || process.cwd();
     this.buildRoot = StaticTools.getBuildDir(opts);
     // get project Root path to looks for package.json for opencv4nodejs section
@@ -685,18 +684,6 @@ export default class OpenCVBuildEnv
     return optArgs;
   }
 
-  public get platform(): NodeJS.Platform {
-    return this._platform;
-  }
-
-  public setPlatform(p: NodeJS.Platform): void {
-    this._platform = p;
-  }
-
-  public get isWin(): boolean {
-    return this.platform === "win32";
-  }
-
   public get rootDir(): string {
     return this.buildRoot;
   }
@@ -744,7 +731,7 @@ export default class OpenCVBuildEnv
     this.getReady();
     const candidat = getEnv("OPENCV_LIB_DIR");
     if (candidat) return candidat;
-    return this.isWin
+    return Platfrm.isWindows
       ? path.join(this.opencvBuild, "lib/Release")
       : path.join(this.opencvBuild, "lib");
   }
@@ -752,7 +739,7 @@ export default class OpenCVBuildEnv
     this.getReady();
     const candidat = getEnv("OPENCV_BIN_DIR");
     if (candidat) return candidat;
-    return this.isWin
+    return Platfrm.isWindows
       ? path.join(this.opencvBuild, "bin/Release")
       : path.join(this.opencvBuild, "bin");
   }
@@ -760,7 +747,7 @@ export default class OpenCVBuildEnv
     return path.join(this.opencvRoot, "auto-build.json");
   }
   public get autoBuildLog(): string {
-    if (this.isWin) {
+    if (Platfrm.isWindows) {
       return path.join(this.opencvRoot, "build-cmd.bat");
     } else {
       return path.join(this.opencvRoot, "build-cmd.sh");
