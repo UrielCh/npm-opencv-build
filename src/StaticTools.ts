@@ -1,4 +1,4 @@
-import fs, { Stats } from "node:fs";
+import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { getDirname, getEnv, setEnv } from "./env";
@@ -9,11 +9,11 @@ import Log from "./Log";
 import { highlight } from "./utils";
 
 export interface BuildDesc {
-    autobuild: string;
-    buildInfo: AutoBuildFile;
-    dir: string;
-    hash: string;
-    date: Date;
+  autobuild: string;
+  buildInfo: AutoBuildFile;
+  dir: string;
+  hash: string;
+  date: Date;
 }
 
 class StaticTools {
@@ -68,41 +68,39 @@ class StaticTools {
     return { changes, summery };
   }
 
-
-    /**
+  /**
    * list existing build in the diven directory
    * @param rootDir build directory
    * @returns builds list
    */
-    public listBuild(rootDir: string): Array<BuildDesc> {
-        const versions = fs.readdirSync(rootDir)
-          .filter((n) => n.startsWith("opencv-"))
-          .map((dir) => {
-            const autobuild = path.join(rootDir, dir, "auto-build.json");
-            try {
-              const stats = fs.statSync(autobuild);
-              const hash = dir.replace(/^opencv-.+-/, "-");
-              const buildInfo = this.readAutoBuildFile(
-                autobuild,
-                true,
-              ) as AutoBuildFile;
-              return { autobuild, dir, hash, buildInfo, date: stats.mtime };
-            } catch (err) {
-              return {
-                autobuild,
-                dir,
-                hash: "",
-                buildInfo: null,
-                date: 0,
-              } as unknown as BuildDesc;
-            }
-          })
-          .filter((n) => n.buildInfo);
-        return versions;
-      }
-    
+  public listBuild(rootDir: string): Array<BuildDesc> {
+    const versions = fs.readdirSync(rootDir)
+      .filter((n) => n.startsWith("opencv-"))
+      .map((dir) => {
+        const autobuild = path.join(rootDir, dir, "auto-build.json");
+        try {
+          const stats = fs.statSync(autobuild);
+          const hash = dir.replace(/^opencv-.+-/, "-");
+          const buildInfo = this.readAutoBuildFile(
+            autobuild,
+            true,
+          ) as AutoBuildFile;
+          return { autobuild, dir, hash, buildInfo, date: stats.mtime };
+        } catch (err) {
+          return {
+            autobuild,
+            dir,
+            hash: "",
+            buildInfo: null,
+            date: 0,
+          } as unknown as BuildDesc;
+        }
+      })
+      .filter((n) => n.buildInfo);
+    return versions;
+  }
 
-        /**
+  /**
    * Read a parse an existing autoBuildFile
    * @param autoBuildFile file path
    * @returns
@@ -160,68 +158,65 @@ class StaticTools {
     return undefined;
   }
 
-    /**
+  /**
    * extract opencv4nodejs section from package.json if available
    */
-    private parsePackageJson(): {
-        file: string;
-        data: { opencv4nodejs?: { [key: string]: string | boolean | number } };
-      } | null {
-        const absPath = this.getPackageJson();
-        if (!fs.existsSync(absPath)) {
-          return null;
-        }
-        const data = JSON.parse(fs.readFileSync(absPath).toString());
-        return { file: absPath, data };
-      }
-    
-    
-    /**
+  private parsePackageJson(): {
+    file: string;
+    data: { opencv4nodejs?: { [key: string]: string | boolean | number } };
+  } | null {
+    const absPath = this.getPackageJson();
+    if (!fs.existsSync(absPath)) {
+      return null;
+    }
+    const data = JSON.parse(fs.readFileSync(absPath).toString());
+    return { file: absPath, data };
+  }
+
+  /**
    * get opencv4nodejs section from package.json if available
    * @returns opencv4nodejs customs
    */
-    public readEnvsFromPackageJson(): {
-        [key: string]: string | boolean | number;
-      } | null {
-        const rootPackageJSON = this.parsePackageJson();
-        if (!rootPackageJSON) {
-          return null;
-        }
-    
-        if (!rootPackageJSON.data) {
-          if (!this.readEnvsFromPackageJsonLog++) {
-            Log.log(
-              "info",
-              "config",
-              `looking for opencv4nodejs option from ${highlight("%s")}`,
-              rootPackageJSON.file,
-            );
-          }
-          return {};
-        }
-        if (!rootPackageJSON.data.opencv4nodejs) {
-          if (!this.readEnvsFromPackageJsonLog++) {
-            Log.log(
-              "info",
-              "config",
-              `no opencv4nodejs section found in ${highlight("%s")}`,
-              rootPackageJSON.file,
-            );
-          }
-          return {};
-        }
-        if (!this.readEnvsFromPackageJsonLog++) {
-          Log.log(
-            "info",
-            "config",
-            `found opencv4nodejs section in ${highlight("%s")}`,
-            rootPackageJSON.file,
-          );
-        }
-        return rootPackageJSON.data.opencv4nodejs;
-      }
-    
+  public readEnvsFromPackageJson(): {
+    [key: string]: string | boolean | number;
+  } | null {
+    const rootPackageJSON = this.parsePackageJson();
+    if (!rootPackageJSON) {
+      return null;
+    }
 
+    if (!rootPackageJSON.data) {
+      if (!this.readEnvsFromPackageJsonLog++) {
+        Log.log(
+          "info",
+          "config",
+          `looking for opencv4nodejs option from ${highlight("%s")}`,
+          rootPackageJSON.file,
+        );
+      }
+      return {};
+    }
+    if (!rootPackageJSON.data.opencv4nodejs) {
+      if (!this.readEnvsFromPackageJsonLog++) {
+        Log.log(
+          "info",
+          "config",
+          `no opencv4nodejs section found in ${highlight("%s")}`,
+          rootPackageJSON.file,
+        );
+      }
+      return {};
+    }
+    if (!this.readEnvsFromPackageJsonLog++) {
+      Log.log(
+        "info",
+        "config",
+        `found opencv4nodejs section in ${highlight("%s")}`,
+        rootPackageJSON.file,
+      );
+    }
+    return rootPackageJSON.data.opencv4nodejs;
+  }
 }
 
 const singleton = new StaticTools();

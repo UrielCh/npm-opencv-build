@@ -20,7 +20,7 @@ import pc from "picocolors";
 import * as detector from "./helper/detect";
 import { getEnv, setEnv } from "./env";
 import Log from "./Log";
-import StaticTools from "./StaticTools"
+import StaticTools from "./StaticTools";
 
 function toBool(value?: string | null) {
   if (!value) {
@@ -46,7 +46,6 @@ function toBool(value?: string | null) {
 
 export default class OpenCVBuildEnv
   implements OpenCVBuildEnvParamsBool, OpenCVBuildEnvParamsString {
-
   public prebuild?:
     | "latestBuild"
     | "latestVersion"
