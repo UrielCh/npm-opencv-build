@@ -12,6 +12,7 @@ import {
   OpenCVBuildEnvParams,
 } from "./misc";
 import npmlog from "npmlog";
+import Log from "./Log";
 
 export class OpenCVBuilder {
   public readonly constant: Constant;
@@ -36,7 +37,7 @@ export class OpenCVBuilder {
       this.env = new OpenCVBuildEnv(opts);
     }
     if (!this.env.prebuild) {
-      OpenCVBuildEnv.log(
+      Log.log(
         "info",
         "init",
         `${utils.highlight("Workdir")} will be: ${utils.formatNumber("%s")}`,
@@ -50,10 +51,10 @@ export class OpenCVBuilder {
   private checkInstalledLibs(autoBuildFile: AutoBuildFile): boolean {
     let hasLibs = true;
 
-    OpenCVBuildEnv.log("info", "install", "checking for opencv libraries");
+    Log.log("info", "install", "checking for opencv libraries");
 
     if (!fs.existsSync(this.env.opencvLibDir)) {
-      OpenCVBuildEnv.log(
+      Log.log(
         "info",
         "install",
         "library dir does not exist:",
@@ -65,7 +66,7 @@ export class OpenCVBuilder {
 
     autoBuildFile.modules.forEach(({ opencvModule, libPath }) => {
       if (!libPath) {
-        OpenCVBuildEnv.log(
+        Log.log(
           "info",
           "install",
           "%s: %s",
@@ -78,7 +79,7 @@ export class OpenCVBuilder {
         lib.opencvModule === opencvModule
       );
       hasLibs = hasLibs && !!foundLib;
-      OpenCVBuildEnv.log(
+      Log.log(
         "info",
         "install",
         `lib ${utils.formatNumber("%s")}: ${utils.light("%s")}`,
@@ -96,7 +97,7 @@ export class OpenCVBuilder {
     // this.env.applyEnvsFromPackageJson()
 
     if (this.env.isAutoBuildDisabled) {
-      OpenCVBuildEnv.log(
+      Log.log(
         "info",
         "install",
         `${
@@ -108,7 +109,7 @@ export class OpenCVBuilder {
       setup.linkBuild();
       return;
     }
-    OpenCVBuildEnv.log(
+    Log.log(
       "info",
       "install",
       `if you want to use an own OpenCV build set ${
@@ -120,7 +121,7 @@ export class OpenCVBuilder {
     // prevent rebuild on every install
     const autoBuildFile = this.env.readAutoBuildFile();
     if (autoBuildFile) {
-      OpenCVBuildEnv.log(
+      Log.log(
         "info",
         "install",
         `found previous build summery auto-build.json: ${
@@ -130,14 +131,14 @@ export class OpenCVBuilder {
 
       if (autoBuildFile.opencvVersion !== this.env.opencvVersion) {
         // can no longer occure with this version of opencv4nodejs-builder
-        OpenCVBuildEnv.log(
+        Log.log(
           "info",
           "install",
           `auto build opencv version is ${autoBuildFile.opencvVersion}, but AUTOBUILD_OPENCV_VERSION=${this.env.opencvVersion}, Will rebuild`,
         );
       } else if (autoBuildFile.autoBuildFlags !== this.env.autoBuildFlags) {
         // should no longer occure since -MD5(autoBuildFlags) is append to build path
-        OpenCVBuildEnv.log(
+        Log.log(
           "info",
           "install",
           `auto build flags are ${autoBuildFile.autoBuildFlags}, but AUTOBUILD_FLAGS is ${this.env.autoBuildFlags}, Will rebuild`,
@@ -145,7 +146,7 @@ export class OpenCVBuilder {
       } else {
         const hasLibs = this.checkInstalledLibs(autoBuildFile);
         if (hasLibs) {
-          OpenCVBuildEnv.log(
+          Log.log(
             "info",
             "install",
             `all libraries are installed in ${
@@ -154,35 +155,35 @@ export class OpenCVBuilder {
           );
           return;
         } else {
-          OpenCVBuildEnv.log("info", "install", "missing some libraries");
+          Log.log("info", "install", "missing some libraries");
         }
       }
     } else {
       // OpenCVBuildEnv.log('info', 'install', `failed to find auto-build.json: ${this.env.autoBuildFile}`)
     }
 
-    OpenCVBuildEnv.log("info", "install", "");
-    OpenCVBuildEnv.log("info", "install", "running install script...");
-    OpenCVBuildEnv.log("info", "install", "");
-    OpenCVBuildEnv.log(
+    Log.log("info", "install", "");
+    Log.log("info", "install", "running install script...");
+    Log.log("info", "install", "");
+    Log.log(
       "info",
       "install",
       `opencv version: ${utils.formatNumber("%s")}`,
       this.env.opencvVersion,
     );
-    OpenCVBuildEnv.log(
+    Log.log(
       "info",
       "install",
       `with opencv contrib: ${utils.formatNumber("%s")}`,
       this.env.isWithoutContrib ? "no" : "yes",
     );
-    OpenCVBuildEnv.log(
+    Log.log(
       "info",
       "install",
       `custom build flags: ${utils.formatNumber("%s")}`,
       this.env.autoBuildFlags || "< none >",
     );
-    OpenCVBuildEnv.log("info", "install", "");
+    Log.log("info", "install", "");
 
     try {
       await utils.requireGit();
@@ -192,16 +193,16 @@ export class OpenCVBuilder {
       time = Date.now() - time;
       const date = new Date(time);
       const timeString = date.toISOString().substring(11, 19);
-      OpenCVBuildEnv.log(
+      Log.log(
         "info",
         "install",
         `Total Build Time: ${utils.formatNumber(timeString)}`,
       );
     } catch (err) {
       if (err instanceof Error) {
-        OpenCVBuildEnv.log("error", "install", err.toString());
+        Log.log("error", "install", err.toString());
       } else {
-        OpenCVBuildEnv.log("error", "install", JSON.stringify(err));
+        Log.log("error", "install", JSON.stringify(err));
       }
       process.exit(1);
     }
