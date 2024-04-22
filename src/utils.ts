@@ -4,6 +4,7 @@ import { EOL } from 'os';
 import path from 'path';
 import log from 'npmlog';
 import pc from 'picocolors';
+import { getEnv } from './env';
 
 /**
  * excape spaces for shell execution
@@ -177,7 +178,7 @@ export function isCudaAvailable(): boolean {
   }
   // Because NVCC is not installed by default & requires an extra install step,
   // this is work around that always works
-  const {CUDA_PATH} = process.env;
+  const CUDA_PATH = getEnv('CUDA_PATH');
   for (const cudaPath of [CUDA_PATH, '/usr/local/cuda/']) {
     if (!cudaPath)
       continue;

@@ -9,6 +9,7 @@ import { ALLARGS, ArgInfo, MODEULES_MAP, OpenCVBuildEnvParams, OpenCVBuildEnvPar
 import { ALL_OPENCV_MODULES } from './misc';
 import pc from 'picocolors';
 import * as detector from './helper/detect';
+import { getEnv, setEnv } from './env';
 
 function toBool(value?: string | null) {
     if (!value)
@@ -95,7 +96,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
      * @returns
      */
     public static getBuildDir(opts = {} as OpenCVBuildEnvParams) {
-        let buildRoot = opts.buildRoot || process.env.OPENCV_BUILD_ROOT || path.join(__dirname, '..')
+        let buildRoot = opts.buildRoot || getEnv('OPENCV_BUILD_ROOT') || path.join(__dirname, '..')
         if (buildRoot[0] === '~') {
             buildRoot = path.join(os.homedir(), buildRoot.slice(1));
         }
@@ -161,24 +162,24 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
     public static autoLocatePrebuild(): { changes: number, summery: string[] } {
         let changes = 0;
         const summery = [] as string[];
-        if (!process.env.OPENCV_BIN_DIR) {
+        if (!getEnv('OPENCV_BIN_DIR')) {
             const candidate = detector.detectBinDir();
             if (candidate) {
-                process.env.OPENCV_BIN_DIR = candidate;
+                setEnv("OPENCV_BIN_DIR", candidate);
                 changes++;
             }
         }
-        if (!process.env.OPENCV_LIB_DIR) {
+        if (!getEnv('OPENCV_LIB_DIR')) {
             const candidate = detector.detectLibDir();
             if (candidate) {
-                process.env.OPENCV_LIB_DIR = candidate;
+                setEnv('OPENCV_LIB_DIR', candidate);
                 changes++;
             }
         }
-        if (!process.env.OPENCV_INCLUDE_DIR) {
+        if (!getEnv('OPENCV_INCLUDE_DIR')) {
             const candidate = detector.detectIncludeDir();
             if (candidate) {
-                process.env.OPENCV_INCLUDE_DIR = candidate;
+                setEnv('OPENCV_INCLUDE_DIR', candidate);
                 changes++;
             }
         }
@@ -216,7 +217,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             if (this.#packageEnv && this.#packageEnv[info.conf]) {
                 value = this.#packageEnv[info.conf] || '';
             } else {
-                value = process.env[info.env] || '';
+                value = getEnv(info.env) || '';
             }
         }
         if (info.isBool) {
@@ -230,7 +231,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
     constructor(private opts = {} as OpenCVBuildEnvParams) {
         this.prebuild = opts.prebuild;
         this._platform = process.platform;
-        this.packageRoot = opts.rootcwd || process.env.INIT_CWD || process.cwd();
+        this.packageRoot = opts.rootcwd || getEnv('INIT_CWD') || process.cwd();
         this.buildRoot = OpenCVBuildEnv.getBuildDir(opts);
         // get project Root path to looks for package.json for opencv4nodejs section
         try {
@@ -328,9 +329,9 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             if (!this.opencvVersion) {
                 throw Error(`autobuild file is corrupted, opencvVersion is missing in ${builds[0].autobuild}`);
             }
-            process.env.OPENCV_BIN_DIR = autoBuildFile.env.OPENCV_BIN_DIR;
-            process.env.OPENCV_INCLUDE_DIR = autoBuildFile.env.OPENCV_INCLUDE_DIR;
-            process.env.OPENCV_LIB_DIR = autoBuildFile.env.OPENCV_LIB_DIR;
+            setEnv('OPENCV_BIN_DIR', autoBuildFile.env.OPENCV_BIN_DIR);
+            setEnv('OPENCV_INCLUDE_DIR', autoBuildFile.env.OPENCV_INCLUDE_DIR);
+            setEnv('OPENCV_LIB_DIR', autoBuildFile.env.OPENCV_LIB_DIR);
 
             if (this.buildWithCuda && isCudaAvailable()) {
                 this.#enabledModules.add('cudaarithm');
@@ -357,8 +358,8 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             this.opencvVersion = this.getExpectedVersion("4.9.0");
             OpenCVBuildEnv.log('info', 'init', `using openCV verison ${formatNumber(this.opencvVersion)}`);
 
-            if (process.env.INIT_CWD) {
-                OpenCVBuildEnv.log('info', 'init', `${highlight("INIT_CWD")} is defined overwriting root path to ${highlight(process.env.INIT_CWD)}`)
+            if (getEnv('INIT_CWD')) {
+                OpenCVBuildEnv.log('info', 'init', `${highlight("INIT_CWD")} is defined overwriting root path to ${highlight(getEnv('INIT_CWD'))}`)
             }
             // ensure that OpenCV workdir exists
             if (!fs.existsSync(this.buildRoot)) {
@@ -412,13 +413,13 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
         for (const varname of ['binDir', 'incDir', 'libDir']) {
             const varname2 = varname as 'binDir' | 'incDir' | 'libDir';
             const value = this.resolveValue(ALLARGS[varname2]);
-            if (value && process.env[varname] !== value) {
-                process.env[ALLARGS[varname2].env] = value;
+            if (value && getEnv(varname) !== value) {
+                setEnv(ALLARGS[varname2].env, value);
             }
         }
         if (this.no_autobuild) {
             // Try autoDetect opencv paths
-            if (!process.env.OPENCV_BIN_DIR || !process.env.OPENCV_LIB_DIR || !process.env.OPENCV_INCLUDE_DIR) {
+            if (!getEnv('OPENCV_BIN_DIR') || !getEnv('OPENCV_LIB_DIR') || !getEnv('OPENCV_INCLUDE_DIR')) {
                 detector.applyDetect();
             }
 
@@ -427,7 +428,7 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
              */
             const errors = [];
             for (const varname of OPENCV_PATHS_ENV) {
-                const value = process.env[varname];
+                const value = getEnv(varname);
                 if (!value) {
                     errors.push(`${varname} must be define if auto-build is disabled, and autodetection failed`);
                     continue;
@@ -602,9 +603,9 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
             autoBuildFlags: this.autoBuildFlags,
             cudaArch: this.cudaArch,
             buildRoot: this.buildRoot,
-            OPENCV_INCLUDE_DIR: process.env.OPENCV_INCLUDE_DIR || '',
-            OPENCV_LIB_DIR: process.env.OPENCV_LIB_DIR || '',
-            OPENCV_BIN_DIR: process.env.OPENCV_BIN_DIR || '',
+            OPENCV_INCLUDE_DIR: getEnv('OPENCV_INCLUDE_DIR'),
+            OPENCV_LIB_DIR:     getEnv('OPENCV_LIB_DIR'),
+            OPENCV_BIN_DIR:     getEnv('OPENCV_BIN_DIR'),
             modules: [...this.#enabledModules].sort(),
         }
     }
@@ -719,21 +720,24 @@ export default class OpenCVBuildEnv implements OpenCVBuildEnvParamsBool, OpenCVB
     }
     public get opencv4Include(): string {
         this.getReady();
-        if (process.env.OPENCV_INCLUDE_DIR) return process.env.OPENCV_INCLUDE_DIR;
+        const candidat = getEnv('OPENCV_INCLUDE_DIR'); 
+        if (candidat) return candidat;
         return path.join(this.opencvInclude, 'opencv4')
     }
     public get opencvIncludeDir(): string {
         this.getReady();
-        return process.env.OPENCV_INCLUDE_DIR || '';
+        return getEnv('OPENCV_INCLUDE_DIR');
     }
     public get opencvLibDir(): string {
         this.getReady();
-        if (process.env.OPENCV_LIB_DIR) return process.env.OPENCV_LIB_DIR;
+        const candidat = getEnv('OPENCV_LIB_DIR'); 
+        if (candidat) return candidat;
         return this.isWin ? path.join(this.opencvBuild, 'lib/Release') : path.join(this.opencvBuild, 'lib')
     }
     public get opencvBinDir(): string {
         this.getReady();
-        if (process.env.OPENCV_BIN_DIR) return process.env.OPENCV_BIN_DIR;
+        const candidat = getEnv('OPENCV_BIN_DIR'); 
+        if (candidat) return candidat;
         return this.isWin ? path.join(this.opencvBuild, 'bin/Release') : path.join(this.opencvBuild, 'bin')
     }
     public get autoBuildFile(): string {

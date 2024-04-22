@@ -2,6 +2,7 @@ import log from 'npmlog';
 import { execFile, formatNumber, highlight, light } from './utils';
 import path from 'path';
 import {globSync} from "glob";
+import { getEnv } from './env';
 
 export interface PathVersion {
   version: number;
@@ -12,7 +13,7 @@ export interface PathVersion {
  * @returns all MSBuild.exe version in PROGRAM FILES most recent first.
  */
 export async function findMSBuild(): Promise<PathVersion[]> {
-  const progFiles = new Set([process.env.programfiles, process.env.ProgramW6432, process.env['programfiles(x86)']]);
+  const progFiles = new Set([getEnv('programfiles'), getEnv('ProgramW6432'), getEnv('programfiles(x86)')]);
   const matches: string[] = [];
 
   for (const progFile of progFiles) {

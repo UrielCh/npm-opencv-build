@@ -8,6 +8,7 @@ import log from 'npmlog';
 import { rimraf } from 'rimraf';
 import { OPENCV_PATHS_ENV } from './misc';
 import path from 'path';
+import { getEnv } from './env';
 
 export class SetupOpencv {
   constructor(private readonly builder: OpenCVBuilder) { }
@@ -168,7 +169,7 @@ export class SetupOpencv {
     log.info('install', `Cleaning old build: src, build and contrib-src directories`)
     try {
       for (const k of OPENCV_PATHS_ENV) {
-        const v = process.env[k];
+        const v = getEnv(k);
         if (v) {
           const setEnv = (process.platform === 'win32') ? '$Env:' : 'export ';
           this.execLog.push(`${setEnv}${k}=${protect(v)}`);

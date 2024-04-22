@@ -1,14 +1,15 @@
 import { globSync } from "glob";
 import fs from "fs";
 import { highlight } from "../utils";
+import { setEnv } from "../env";
 
 export const summery = new Set<string>();
 
 export function applyDetect(): void {
   const {OPENCV_BIN_DIR, OPENCV_LIB_DIR, OPENCV_INCLUDE_DIR} = detect();
-  process.env.OPENCV_BIN_DIR = OPENCV_BIN_DIR;
-  process.env.OPENCV_LIB_DIR = OPENCV_LIB_DIR;
-  process.env.OPENCV_INCLUDE_DIR = OPENCV_INCLUDE_DIR;
+  setEnv('OPENCV_BIN_DIR', OPENCV_BIN_DIR);
+  setEnv('OPENCV_LIB_DIR', OPENCV_LIB_DIR);
+  setEnv('OPENCV_INCLUDE_DIR', OPENCV_INCLUDE_DIR);
 }
 
 
@@ -34,10 +35,8 @@ export function detectBinDir(): string {
     for (const candidate of candidates) {
       if (fs.existsSync(candidate)) {
         fnd = true;
-        // process.env.OPENCV_BIN_DIR = candidate;
         summery.add(`OPENCV_BIN_DIR resolved as ${highlight(candidate)}`);
         return candidate;
-        //changes++;
       }
     }
     if (!fnd) {
@@ -50,10 +49,8 @@ export function detectBinDir(): string {
   } else if (os === "linux") {
     const candidate = "/usr/bin/";
     if (fs.existsSync(candidate)) {
-      // process.env.OPENCV_BIN_DIR = candidate;
       summery.add("OPENCV_BIN_DIR resolved");
       return candidate;
-      // changes++;
     } else {
       summery.add(`failed to resolve OPENCV_BIN_DIR from ${candidate}`);
     }
@@ -67,7 +64,6 @@ export function detectBinDir(): string {
     }
     if (candidates.length) {
       const candidate = candidates[0];
-      // process.env.OPENCV_BIN_DIR = candidate;
       summery.add(`OPENCV_BIN_DIR resolved as ${candidate}`);
       return candidate;
     }
