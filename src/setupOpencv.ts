@@ -250,7 +250,7 @@ export class SetupOpencv {
       fs.mkdirSync(env.opencvBuild, { recursive: true });
 
       // hide detached HEAD message.
-      const gitFilter = (data: Buffer): Buffer | null => {
+      const gitFilter = (data: Uint8Array): Uint8Array | null => {
         const asTxt = data.toString();
         if (asTxt.includes("detached HEAD")) return null;
         if (asTxt.includes("--depth is ignored in local clones")) return null;

@@ -93,14 +93,14 @@ export function spawn(
   args: string[],
   options: child_process.ExecOptions,
   filters?: {
-    err?: (data: Buffer) => Buffer | null;
-    out?: (data: Buffer) => Buffer | null;
+    err?: (data: Uint8Array) => Uint8Array | null;
+    out?: (data: Uint8Array) => Uint8Array | null;
   },
 ): Promise<string> {
   filters = filters || {};
-  const filterStdout = (data: Buffer) => {
+  const filterStdout = (data: Uint8Array) => {
     if (filters && filters.out) {
-      data = filters.out(data) as Buffer;
+      data = filters.out(data) as Uint8Array;
       if (!data) {
         return;
       }
@@ -108,9 +108,9 @@ export function spawn(
     process.stdout.write(data);
   };
 
-  const filterStderr = (data: Buffer) => {
+  const filterStderr = (data: Uint8Array) => {
     if (filters && filters.err) {
-      data = filters.err(data) as Buffer;
+      data = filters.err(data) as Uint8Array;
       if (!data) {
         return;
       }
