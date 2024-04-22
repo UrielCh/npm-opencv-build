@@ -25,5 +25,7 @@ export class Constant {
     "x64": " Win64",
     "ia32": "",
     "arm": " ARM",
+    "x86_64": " Win64",
+    "aarch64": " ARM",
   };
 }

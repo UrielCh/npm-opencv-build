@@ -37,11 +37,13 @@ export class getLibsFactory {
    * @returns lib extention based on current OS
    */
   get getLibSuffix(): "lib" | "dylib" | "so" {
-    if (Platfrm.isWindows)
-        return "lib";
-      if (Platfrm.isMac)
-        return "dylib";
-      return "so";
+    if (Platfrm.isWindows) {
+      return "lib";
+    }
+    if (Platfrm.isMac) {
+      return "dylib";
+    }
+    return "so";
   }
 
   /**

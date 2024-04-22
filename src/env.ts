@@ -22,9 +22,8 @@ export function getDirname(): string {
   return new URL(".", import.meta.url).pathname;
 }
 
-
 export class Platfrm {
-  public static theOS: string = process.platform;//Deno.build.os;
+  public static theOS: string = process.platform; //Deno.build.os;
 
   public static changeOS(os: "windows" | "linux" | "darwin") {
     Platfrm.theOS = os;
@@ -39,4 +38,3 @@ export class Platfrm {
     return Platfrm.theOS === "darwin";
   }
 }
-
