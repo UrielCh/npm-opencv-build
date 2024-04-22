@@ -18,7 +18,7 @@ import {
 import { ALL_OPENCV_MODULES } from "./misc";
 import pc from "picocolors";
 import * as detector from "./helper/detect";
-import { getEnv, setEnv } from "./env";
+import { getDirname, getEnv, setEnv } from "./env";
 import Log from "./Log";
 
 function toBool(value?: string | null) {
@@ -117,7 +117,7 @@ export default class OpenCVBuildEnv
    */
   public static getBuildDir(opts = {} as OpenCVBuildEnvParams) {
     let buildRoot = opts.buildRoot || getEnv("OPENCV_BUILD_ROOT") ||
-      path.join(__dirname, "..");
+      path.join(getDirname(), "..");
     if (buildRoot[0] === "~") {
       buildRoot = path.join(os.homedir(), buildRoot.slice(1));
     }
@@ -905,9 +905,6 @@ export default class OpenCVBuildEnv
   }
 
   public get rootDir(): string {
-    // const __filename = fileURLToPath(import.meta.url);
-    // const __dirname = dirname(__filename);
-    // return path.resolve(__dirname, '../');
     return this.buildRoot;
   }
   public get opencvRoot(): string {
