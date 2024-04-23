@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "node:path";
-import log from "npmlog";
-import { rimraf } from "rimraf";
-import { OpenCVBuilder } from "./OpenCVBuilder";
-import { findMSBuild, PathVersion } from "./findMsBuild";
-import type { AutoBuildFile } from "./types";
+import log from "npm:npmlog";
+import { rimraf } from "npm:rimraf";
+import { OpenCVBuilder } from "./OpenCVBuilder.ts";
+import { findMSBuild, PathVersion } from "./findMsBuild.ts";
+import type { AutoBuildFile } from "./types.ts";
 import {
   formatNumber,
   formatRed,
@@ -13,9 +13,9 @@ import {
   protect,
   spawn,
   toExecCmd,
-} from "./utils";
-import { OPENCV_PATHS_ENV } from "./misc";
-import { getArch, getEnv, Platfrm } from "./env";
+} from "./utils.ts";
+import { OPENCV_PATHS_ENV } from "./misc.ts";
+import { getArch, getEnv, Platfrm } from "./env.ts";
 
 export class SetupOpencv {
   constructor(private readonly builder: OpenCVBuilder) {}

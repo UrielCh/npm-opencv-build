@@ -1,18 +1,18 @@
 import fs from "node:fs";
-import * as utils from "./utils";
-import type { AutoBuildFile } from "./types";
-import { getLibsFactory } from "./getLibsFactory";
-import { SetupOpencv } from "./setupOpencv";
-import { Constant } from "./constants";
-import OpenCVBuildEnv from "./OpenCVBuildEnv";
+import npmlog from "npm:npmlog";
+import * as utils from "./utils.ts";
+import type { AutoBuildFile } from "./types.ts";
+import { getLibsFactory } from "./getLibsFactory.ts";
+import { SetupOpencv } from "./setupOpencv.ts";
+import { Constant } from "./constants.ts";
+import OpenCVBuildEnv from "./OpenCVBuildEnv.ts";
 import {
   args2Option,
   genHelp,
   OPENCV_PATHS_ENV,
   OpenCVBuildEnvParams,
-} from "./misc";
-import npmlog from "npmlog";
-import Log from "./Log";
+} from "./misc.ts";
+import Log from "./Log.ts";
 
 export class OpenCVBuilder {
   public readonly constant: Constant;
@@ -28,7 +28,8 @@ export class OpenCVBuilder {
       if (opts.extra && (opts.extra.help || opts.extra.h)) {
         console.log("npm-opencv-build usage:");
         console.log(genHelp());
-        process.exit(1);
+        Deno.exit(1);
+        // process.exit(1);
       }
     }
     if (opts instanceof OpenCVBuildEnv) {
@@ -204,7 +205,8 @@ export class OpenCVBuilder {
       } else {
         Log.log("error", "install", JSON.stringify(err));
       }
-      process.exit(1);
+      Deno.exit(1);
+      // process.exit(1);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { OpencvModulesType } from "./misc";
+import type { OpencvModulesType } from "./misc.ts";
 
 export type OpencvModule = {
   opencvModule: string;

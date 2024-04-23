@@ -1,4 +1,4 @@
-import log, { LogLevels } from "npmlog";
+import log, { LogLevels } from "npm:npmlog";
 
 export default class Log {
   public static silence: boolean;

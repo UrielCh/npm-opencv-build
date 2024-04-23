@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import OpenCVBuilder from "./OpenCVBuilder";
-import type { OpencvModule } from "./types";
-import { OpencvModulesType } from "./misc";
-import { Platfrm } from "./env";
+import OpenCVBuilder from "./OpenCVBuilder.ts";
+import type { OpencvModule } from "./types.ts";
+import { OpencvModulesType } from "./misc.ts";
+import { Platfrm } from "./env.ts";
 
 export class getLibsFactory {
   libFiles: string[] = [];
@@ -93,6 +93,7 @@ export class getLibsFactory {
 
   getLibs(): OpencvModule[] {
     const libDir = this.builder.env.opencvLibDir;
+    // console.log("libDir => ", libDir);
     if (!fs.existsSync(libDir)) {
       throw new Error(`specified lib dir does not exist: ${libDir}`);
     }

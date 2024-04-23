@@ -1,4 +1,4 @@
-import { OpenCVBuilder } from "./OpenCVBuilder";
+import { OpenCVBuilder } from "./OpenCVBuilder.ts";
 
 export class Constant {
   constructor(private readonly builder: OpenCVBuilder) {

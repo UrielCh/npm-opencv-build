@@ -2,9 +2,9 @@ import child_process from "node:child_process";
 import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "node:path";
-import log from "npmlog";
-import pc from "picocolors";
-import { getEnv, Platfrm } from "./env";
+import log from "npm:npmlog";
+import pc from "npm:picocolors";
+import { getEnv, Platfrm } from "./env.ts";
 
 /**
  * excape spaces for shell execution
@@ -105,7 +105,8 @@ export function spawn(
         return;
       }
     }
-    process.stdout.write(data);
+    // process.stdout.write(data);
+    Deno.stdout.write(data);
   };
 
   const filterStderr = (data: Uint8Array) => {
@@ -115,7 +116,8 @@ export function spawn(
         return;
       }
     }
-    process.stderr.write(data);
+    // process.stderr.write(data);
+    Deno.stdout.write(data);
   };
 
   log.silly("install", "spawning:", protect(cmd), args.map(protect).join(" "));
