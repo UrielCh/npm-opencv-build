@@ -1,5 +1,8 @@
 import fs from "node:fs";
 import { EOL } from "node:os";
+import path from "node:path";
+import log from "npmlog";
+import { rimraf } from "rimraf";
 import { OpenCVBuilder } from "./OpenCVBuilder";
 import { findMSBuild, PathVersion } from "./findMsBuild";
 import type { AutoBuildFile } from "./types";
@@ -11,10 +14,7 @@ import {
   spawn,
   toExecCmd,
 } from "./utils";
-import log from "npmlog";
-import { rimraf } from "rimraf";
 import { OPENCV_PATHS_ENV } from "./misc";
-import path from "path";
 import { getArch, getEnv, Platfrm } from "./env";
 
 export class SetupOpencv {
