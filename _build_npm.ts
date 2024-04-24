@@ -72,7 +72,8 @@ export async function buildDnt() {
       url: `https://github.com/UrielCh/${prj}/issues`,
     },
     bin: {
-      "opencv-build-npm": "script/main.js",
+      // "opencv-build-npm": "script/main.js",
+      "opencv-build-npm": "esm/main.js", // esm looks to works fine with modern nodejs
     },
     scripts: {
       "checkExports": "npx @arethetypeswrong/cli $(npm pack)",
