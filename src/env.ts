@@ -1,3 +1,5 @@
+import { path } from "../deps.ts";
+
 /**
  * portable env functions
  */
@@ -22,7 +24,8 @@ export function getDirname(): string {
   // return __dirname;
   // }
   // return import.meta.url if it's a module
-  return new URL(".", import.meta.url).pathname;
+  const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
+  return __dirname; // new URL(".", import.meta.url).pathname;
 }
 
 export class Platfrm {
