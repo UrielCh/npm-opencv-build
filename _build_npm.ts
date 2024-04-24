@@ -83,6 +83,9 @@ export async function buildDnt() {
     "engine-strict": {
       node: ">=18",
     },
+    // dependencies: {
+    //   "picocolors": "1.0.0",
+    // },
     devDependencies: {
       "@types/npmlog": "^7.0.0",
     },
@@ -130,9 +133,10 @@ export async function buildDnt() {
     },
     package: packageJson,
     mappings: {
-      // "https://deno.land/x/logger@v1.1.3/logger.ts": {
-      //   name: "@denodnt/logger",
-      //   version: "1.1.3",
+      // "jsr:@std/fmt/colors":
+      // "https://deno.land/std@0.223.0/fmt/colors.ts": {
+      //   name: "picocolors",
+      //   version: "1.0.0",
       //   peerDependency: false,
       // },
     },
