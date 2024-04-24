@@ -3,7 +3,7 @@
 // import { OpenCVBuildEnv, OpenCVBuilder } from '../dist/cjs/index'
 import OpenCVBuildEnv from "./OpenCVBuildEnv.ts";
 import { OpenCVBuilder } from "./OpenCVBuilder.ts";
-import { assert } from "@std/assert";
+import { assert } from "../dev_deps.ts";
 
 // chai.use(require('chai-string'));
 

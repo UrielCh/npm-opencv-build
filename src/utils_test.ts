@@ -1,4 +1,4 @@
-import { assert } from "@std/assert";
+import { assert } from "../dev_deps.ts";
 import * as utils from "./utils.ts";
 
 Deno.test("protect", function testLib() {
