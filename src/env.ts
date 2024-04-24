@@ -3,8 +3,9 @@
  */
 
 export function getEnv(name: string): string {
-  if (!name)
-    return ''
+  if (!name) {
+    return "";
+  }
   // const value = process.env[name];
   const value = Deno.env.get(name);
   return value || "";
@@ -25,7 +26,7 @@ export function getDirname(): string {
 }
 
 export class Platfrm {
-  public static theOS: string = Deno.build.os; // process.platform; 
+  public static theOS: string = Deno.build.os; // process.platform;
 
   public static changeOS(os: "windows" | "linux" | "darwin" | string) {
     Platfrm.theOS = os;

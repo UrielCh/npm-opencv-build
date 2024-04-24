@@ -2,9 +2,9 @@ import child_process from "node:child_process";
 import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "node:path";
-import log from "npm:npmlog";
-import pc from "npm:picocolors";
+import { pc } from "../deps.ts";
 import { getEnv, Platfrm } from "./env.ts";
+import Log from "./Log.ts";
 
 /**
  * excape spaces for shell execution
@@ -40,7 +40,7 @@ export function exec(
   cmd: string,
   options?: child_process.ExecOptions,
 ): Promise<string> {
-  log.silly("install", "executing: %s", protect(cmd));
+  Log.log("silly", "install", "executing: %s", protect(cmd));
   return new Promise(function (resolve, reject) {
     child_process.exec(cmd, options, function (err, stdout, stderr) {
       const _err = err || stderr;
@@ -54,7 +54,7 @@ export function execSync(
   cmd: string,
   options?: child_process.ExecOptions,
 ): string {
-  log.silly("install", "executing: %s", protect(cmd));
+  Log.log("silly", "install", "executing: %s", protect(cmd));
   const stdout = child_process.execSync(cmd, options);
   return stdout.toString();
 }
@@ -67,7 +67,8 @@ export function execFile(
   args: string[],
   options?: child_process.ExecOptions,
 ): Promise<string> {
-  log.silly(
+  Log.log(
+    "silly",
     "install",
     "executing: %s %s",
     protect(cmd),
@@ -120,7 +121,13 @@ export function spawn(
     Deno.stdout.write(data);
   };
 
-  log.silly("install", "spawning:", protect(cmd), args.map(protect).join(" "));
+  Log.log(
+    "silly",
+    "install",
+    "spawning:",
+    protect(cmd),
+    args.map(protect).join(" "),
+  );
   return new Promise(function (resolve, reject) {
     try {
       const child = child_process.spawn(cmd, args, {
@@ -151,10 +158,10 @@ export function spawn(
 }
 
 async function requireCmd(cmd: string, hint: string): Promise<string> {
-  log.info("install", `executing: ${pc.cyan("%s")}`, cmd);
+  Log.log("silly", "install", `executing: ${pc.cyan("%s")}`, cmd);
   try {
     const stdout = await exec(cmd);
-    log.verbose("install", `${cmd}: ${stdout.trim()}`);
+    Log.log("verbose", "install", `${cmd}: ${stdout.trim()}`);
     return stdout;
   } catch (err) {
     let errMessage = `failed to execute ${cmd}, ${hint}, error is: `;
@@ -168,10 +175,10 @@ async function requireCmd(cmd: string, hint: string): Promise<string> {
 }
 
 function requireCmdSync(cmd: string, hint: string): string {
-  log.info("install", `executing: ${pc.cyan("%s")}`, cmd);
+  Log.log("info", "install", `executing: ${pc.cyan("%s")}`, cmd);
   try {
     const stdout = execSync(cmd);
-    log.verbose("install", `${cmd}: ${stdout.trim()}`);
+    Log.log("verbose", "install", `${cmd}: ${stdout.trim()}`);
     return stdout;
   } catch (err) {
     let errMessage = `failed to execute ${cmd}, ${hint}, error is: `;
@@ -188,7 +195,12 @@ export async function requireGit() {
   const out = await requireCmd("git --version", "git is required");
   const version = out.match(/version ([\d.\w]+)/);
   if (version) {
-    log.info("install", `git Version ${formatNumber("%s")} found`, version[1]);
+    Log.log(
+      "info",
+      "install",
+      `git Version ${formatNumber("%s")} found`,
+      version[1],
+    );
   }
 }
 
@@ -199,7 +211,8 @@ export async function requireCmake() {
   );
   const version = out.match(/version ([\d.\w]+)/);
   if (version) {
-    log.info(
+    Log.log(
+      "info",
       "install",
       `cmake Version ${formatNumber("%s")} found`,
       version[1],
@@ -216,13 +229,14 @@ export function isCudaAvailable(): boolean {
   if (cached_cuda != null) {
     return cached_cuda;
   }
-  log.info("install", "Check if CUDA is available & what version...");
+  Log.log("info", "install", "Check if CUDA is available & what version...");
   if (Platfrm.isWindows) {
     try {
       requireCmdSync("nvcc --version", "CUDA availability check");
       // return true;
-    } catch (err) {
-      log.info(
+    } catch (_err) {
+      Log.log(
+        "info",
         "install",
         "Seems like CUDA is not installed; nvcc --version call failed",
       );
@@ -243,13 +257,14 @@ export function isCudaAvailable(): boolean {
       const realpath = path.resolve(cudaPath, file);
       if (fs.existsSync(realpath)) {
         const content = fs.readFileSync(realpath, "utf8");
-        log.info("install", content);
+        Log.log("info", "install", content);
         cached_cuda = true;
         return true;
       }
     }
   }
-  log.info(
+  Log.log(
+    "info",
     "install",
     `CUDA version file could not be found in {/usr/local/cuda/,CUDA_PATH}version.{txt,json}`,
   );

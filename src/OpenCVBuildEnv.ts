@@ -2,7 +2,6 @@ import fs, { Stats } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import pc from "npm:picocolors";
 import { formatNumber, highlight, isCudaAvailable } from "./utils.ts";
 import { AutoBuildFile, EnvSummery } from "./types.ts";
 import {
@@ -21,6 +20,7 @@ import * as detector from "./helper/detect.ts";
 import { getEnv, Platfrm, setEnv } from "./env.ts";
 import Log from "./Log.ts";
 import StaticTools from "./StaticTools.ts";
+import { pc } from "../deps.ts";
 
 function toBool(value?: string | null) {
   if (!value) {
@@ -431,7 +431,7 @@ export default class OpenCVBuildEnv
         let stats: Stats;
         try {
           stats = fs.statSync(value);
-        } catch (e) {
+        } catch (_e) {
           errors.push(`${varname} is set to non existing "${value}"`);
           continue;
         }

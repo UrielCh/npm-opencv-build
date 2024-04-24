@@ -1,5 +1,4 @@
-// import { expect } from 'chai';
-import { assertEquals } from "https://deno.land/std@0.223.0/assert/assert_equals.ts";
+import { assertEquals } from "@std/assert";
 import { args2Option } from "./misc.ts";
 
 Deno.test("utils", () => {

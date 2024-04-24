@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import npmlog from "npm:npmlog";
 import * as utils from "./utils.ts";
 import type { AutoBuildFile } from "./types.ts";
 import { getLibsFactory } from "./getLibsFactory.ts";
@@ -23,7 +22,7 @@ export class OpenCVBuilder {
     if (Array.isArray(opts)) {
       opts = args2Option(opts);
       if (opts.verbose) {
-        npmlog.level === "verbose";
+        Log.level = "verbose";
       }
       if (opts.extra && (opts.extra.help || opts.extra.h)) {
         console.log("npm-opencv-build usage:");

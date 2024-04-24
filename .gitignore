@@ -13,3 +13,4 @@ latest
 dist/esm/helper
 dist/cjs/helper
 dist/types/
+npm/

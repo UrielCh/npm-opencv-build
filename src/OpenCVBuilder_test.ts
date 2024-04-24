@@ -3,8 +3,7 @@
 // import { OpenCVBuildEnv, OpenCVBuilder } from '../dist/cjs/index'
 import OpenCVBuildEnv from "./OpenCVBuildEnv.ts";
 import { OpenCVBuilder } from "./OpenCVBuilder.ts";
-// import { assertInstanceOf, assertEquals } from '../dev_deps.ts'
-import { assert } from "jsr:@std/assert";
+import { assert } from "@std/assert";
 
 // chai.use(require('chai-string'));
 
@@ -21,8 +20,8 @@ import { assert } from "jsr:@std/assert";
 Deno.test("testLib", function testLib(t) {
   // console.log('testLib started');
   // console.log('testLib started');
-  const env = new OpenCVBuildEnv({prebuild: 'latestBuild'});
-  
+  const env = new OpenCVBuildEnv({ prebuild: "latestBuild" });
+
   const builder = new OpenCVBuilder(env);
   builder.getLibs.syncPath = false;
   // const opencvModules = builder.env.enabledModules;
@@ -40,17 +39,17 @@ Deno.test("testLib", function testLib(t) {
   //   // expect(res[0].libPath).to.equal(path.join(env.opencvLibDir, libFiles[0]))
   // })
 
-   //t.step('should find  .so (unix)', () => {
-   //  const libFiles = [ 'libopencv_.so' ]
-   //  Platfrm.changeOS('linux')
-   //  builder.getLibs.libFiles = libFiles;
-   //  const res = builder.getLibs.getLibs();
-   //  assertInstanceOf(res, Array);
-   //  assertEquals(res.length, 1);
-   //  assertEquals(res[0].opencvModule, '')
-   //  //assert(res[0].libPath.endWith(libFiles[0]));
-   //})
-/*
+  //t.step('should find  .so (unix)', () => {
+  //  const libFiles = [ 'libopencv_.so' ]
+  //  Platfrm.changeOS('linux')
+  //  builder.getLibs.libFiles = libFiles;
+  //  const res = builder.getLibs.getLibs();
+  //  assertInstanceOf(res, Array);
+  //  assertEquals(res.length, 1);
+  //  assertEquals(res[0].opencvModule, '')
+  //  //assert(res[0].libPath.endWith(libFiles[0]));
+  //})
+  /*
 //
 //   it('should find  .dylib (osX)', () => {
 //     const libFiles = [ 'libopencv_.dylib' ]
