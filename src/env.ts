@@ -19,10 +19,10 @@ export function setEnv(name: string, value: string): void {
 export function getDirname(): string {
   // return __dirname if it's a nodejs script
   // if (typeof __dirname !== "undefined") {
-  return __dirname;
+  // return __dirname;
   // }
   // return import.meta.url if it's a module
-  //return new URL(".", import.meta.url).pathname;
+  return new URL(".", import.meta.url).pathname;
 }
 
 export class Platfrm {
