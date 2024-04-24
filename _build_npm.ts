@@ -56,7 +56,7 @@ export async function buildDnt() {
       "justadudewhohacks (https://github.com/justadudewhohacks)",
     ],
     description:
-      "Script to auto build recent OpenCV + contrib via npm 2023 Edition",
+      "Script to auto build recent OpenCV + contrib via npm 2024 Edition",
     keywords: [
       "opencv",
       "build",
@@ -72,7 +72,12 @@ export async function buildDnt() {
       url: `https://github.com/UrielCh/${prj}/issues`,
     },
     bin: {
-      // "opencv-build-npm": "main.js",
+      "opencv-build-npm": "script/main.js",
+    },
+    scripts: {
+      "checkExports": "npx @arethetypeswrong/cli $(npm pack)",
+      "install_macm1": "node script/main.js --version 4.9.0 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\"",
+      "install_4_9_0_cuda_30XX": "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/main.js --keepsource --version 4.9.0 --cuda --cudaArch=8.6",
     },
     "engine-strict": {
       node: ">=18",
@@ -84,10 +89,21 @@ export async function buildDnt() {
   await emptyDir("./npm");
 
   await build({
-    entryPoints: ["./mod.ts"], // , "main.ts"
+    entryPoints: [
+      {
+        kind: "export",
+        name: ".",
+        path: "mod.ts",
+      },
+      {
+      kind: "bin",
+      name: "opencv-build-npm",
+      path: "main.ts",
+      // path: "script/main.js",
+    }],
     outDir: "./npm",
     test: true,
-    declaration: "separate",
+    // declaration: "separate",
     shims: {
       // see JS docs for overview and more options
       deno: true,

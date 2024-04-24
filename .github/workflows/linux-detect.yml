@@ -1,8 +1,8 @@
 name: Use OpenCV from Ubuntu apt
 on:
    push:
-     branches: [ "never", "master", "test" ]
-     paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-detect.yml' ]
+     branches: [ "never", "master", "deno" ]
+     paths: ['src/**', 'src/*.ts', '.github/workflows/linux-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]
 jobs:
@@ -20,24 +20,12 @@ jobs:
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     steps:
     - uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2
+    - uses: denoland/setup-deno@v1
       with:
-        version: 8.14.0
-        run_install: |
-         - recursive: true
-           args: [--frozen-lockfile, --strict-peer-dependencies]
-           
+        deno-version: v1.x
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
-        sudo apt update
-        sudo apt install libopencv-dev
-    - name: Use Node.js 20
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
-        cache: 'pnpm'
-    - run: pnpm run build
-    #  --prebuild=latestBuild
+        echo sudo apt update; sudo apt install libopencv-dev
     - name: Detect OpenCV
-      run: node bin/main.js --verbose
-    - run: pnpm test
+      run: deno run -A main.ts --verbose
+    - run: deno test -A
