@@ -11,4 +11,5 @@ export {
   type OpenCVBuildEnvParams,
   type OpencvModulesType,
 } from "./src/misc.ts";
+export { default as Log } from "./src/Log.ts";
 export default OpenCVBuilder;
