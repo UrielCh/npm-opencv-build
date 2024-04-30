@@ -2,6 +2,9 @@
 import { build, emptyDir, type PackageJson } from "@deno/dnt";
 import { pc } from "./deps.ts";
 
+// deno run -A _build_npm.ts 1.0.0
+// cd npm
+// ncu -i
 export async function buildDnt() {
   let version = Deno.args[0];
   const GITHUB_REF = Deno.env.get("GITHUB_REF");
