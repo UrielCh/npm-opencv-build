@@ -1,58 +1,65 @@
 //import { type OpenCVBuildEnvParams } from '../dist/types/index'
-import { type OpenCVBuildEnvParams } from "../";
+// import { type OpenCVBuildEnvParams } from '../src/index.ts'
 // import { OpenCVBuildEnv, OpenCVBuilder } from '../dist/cjs/index'
-import { OpenCVBuildEnv, OpenCVBuilder } from "../";
-import chai, { expect } from "chai";
-import { Platfrm } from "../src/env";
-// import path from 'path';
+import OpenCVBuildEnv from "./OpenCVBuildEnv.ts";
+import { OpenCVBuilder } from "./OpenCVBuilder.ts";
+import { assert } from "../dev_deps.ts";
 
-chai.use(require("chai-string"));
+// chai.use(require('chai-string'));
 
-export class FakeOpenCVBuildEnv extends OpenCVBuildEnv {
-  constructor(opts: OpenCVBuildEnvParams) {
-    super(opts);
-  }
+// export class FakeOpenCVBuildEnv extends OpenCVBuildEnv {
+//   constructor(opts: OpenCVBuildEnvParams) {
+//     super(opts);
+//   }
+//
+//   public setPlatform(platform: NodeJS.Platform) {
+//       super.setPlatform(platform);
+//   }
+// }
 
-  public setPlatform(platform: NodeJS.Platform) {
-    Platfrm.changeOS(platform);
-  }
-}
+Deno.test("testLib", function testLib(t) {
+  // console.log('testLib started');
+  // console.log('testLib started');
+  const env = new OpenCVBuildEnv({ prebuild: "latestBuild" });
 
-describe("libs", () => {
-  const env = new FakeOpenCVBuildEnv({ prebuild: "latestBuild" });
   const builder = new OpenCVBuilder(env);
   builder.getLibs.syncPath = false;
-  const opencvModules = builder.env.enabledModules;
+  // const opencvModules = builder.env.enabledModules;
+  assert(builder, "builder ready");
+  //t.step('should find  .lib (win) Fullpath test', () => {
+  //   const libFiles = [ 'opencv_340.lib' ]
+  //   Platfrm.changeOS('windows');
+  //   //env.setPlatform('win32')
+  //   builder.getLibs.libFiles = libFiles;
+  //   const res = builder.getLibs.getLibs();
+  //   assertInstanceOf(res, Array);
+  //   assertEquals(res.length, 1);
+  //   //.to.be.an('array').lengthOf(1, `array: ${JSON.stringify(res)}`)
+  //   // expect(res[0].opencvModule).to.equal('', `opencvModule is ${res[0].opencvModule}`)
+  //   // expect(res[0].libPath).to.equal(path.join(env.opencvLibDir, libFiles[0]))
+  // })
 
-  //   it('should find  .lib (win) Fullpath test', () => {
-  //     const libFiles = [ 'opencv_340.lib' ]
-  //     env.setPlatform('win32')
-  //     builder.getLibs.libFiles = libFiles;
-  //     const res = builder.getLibs.getLibs();
-  //     expect(res).to.be.an('array').lengthOf(1, `array: ${JSON.stringify(res)}`)
-  //     expect(res[0].opencvModule).to.equal('', `opencvModule is ${res[0].opencvModule}`)
-  //     expect(res[0].libPath).to.equal(path.join(env.opencvLibDir, libFiles[0]))
-  //   })
-  //
-  //   it('should find  .so (unix)', () => {
-  //     const libFiles = [ 'libopencv_.so' ]
-  //     env.setPlatform('linux')
-  //     builder.getLibs.libFiles = libFiles;
-  //     const res = builder.getLibs.getLibs();
-  //     expect(res).to.be.an('array').lengthOf(1)
-  //     expect(res[0].opencvModule).to.equal('')
-  //     expect(res[0].libPath).to.endWith(libFiles[0])
-  //   })
-  //
-  //   it('should find  .dylib (osX)', () => {
-  //     const libFiles = [ 'libopencv_.dylib' ]
-  //     env.setPlatform('darwin')
-  //     builder.getLibs.libFiles = libFiles;
-  //     const res = builder.getLibs.getLibs();
-  //     expect(res).to.be.an('array').lengthOf(1)
-  //     expect(res[0].opencvModule).to.equal('')
-  //     expect(res[0].libPath).to.endWith(libFiles[0])
-  //   })
+  //t.step('should find  .so (unix)', () => {
+  //  const libFiles = [ 'libopencv_.so' ]
+  //  Platfrm.changeOS('linux')
+  //  builder.getLibs.libFiles = libFiles;
+  //  const res = builder.getLibs.getLibs();
+  //  assertInstanceOf(res, Array);
+  //  assertEquals(res.length, 1);
+  //  assertEquals(res[0].opencvModule, '')
+  //  //assert(res[0].libPath.endWith(libFiles[0]));
+  //})
+  /*
+//
+//   it('should find  .dylib (osX)', () => {
+//     const libFiles = [ 'libopencv_.dylib' ]
+//     env.setPlatform('darwin')
+//     builder.getLibs.libFiles = libFiles;
+//     const res = builder.getLibs.getLibs();
+//     expect(res).to.be.an('array').lengthOf(1)
+//     expect(res[0].opencvModule).to.equal('')
+//     expect(res[0].libPath).to.endWith(libFiles[0])
+//   })
 
   // it('should find opencv .lib files', () => {
   //   const coreLibFile = 'opencv_core340.lib'
@@ -125,7 +132,7 @@ describe("libs", () => {
   //  expect(res.find(l => l.opencvModule === 'objdetect')).to.have.property('libPath').to.endWith(objdetectLibFile)
   //  expect(res.some(({ libPath }) => libPath === dnnObjdetectLibFile)).to.be.false
   //})
-  //
+//
   //it('should only link .dylib files with exact name match', () => {
   //  const objdetectLibFile = 'libopencv_objdetect.dylib'
   //  const dnnObjdetectLibFile = 'libopencv_dnn_objdetect.dylib'
@@ -141,4 +148,5 @@ describe("libs", () => {
   //  expect(res.find(l => l.opencvModule === 'objdetect')).to.have.property('libPath').to.endWith(objdetectLibFile)
   //  expect(res.some(({ libPath }) => libPath === dnnObjdetectLibFile)).to.be.false
   //})
+  */
 });

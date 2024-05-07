@@ -1,4 +1,4 @@
-import log, { LogLevels } from "npmlog";
+import npmlog, { LogLevels } from "npm:npmlog";
 
 export default class Log {
   public static silence: boolean;
@@ -10,7 +10,11 @@ export default class Log {
     ...args: unknown[]
   ): void {
     if (!Log.silence) {
-      log.log(level, prefix, message, ...args);
+      npmlog.log(level, prefix, message, ...args);
     }
+  }
+
+  public static set level(level: LogLevels) {
+    npmlog.level = level;
   }
 }

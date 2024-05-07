@@ -2,42 +2,22 @@ name: build openCV on ubuntu
 
 on:
   push:
-    branches: [ "master", "piercus", "test" ]
-    paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-build.yml' ]
+    branches: [ "master", "piercus", "test", "deno" ]
+    paths: ['src/**', 'deno.json', '.github/workflows/linux-build.yml' ]
   pull_request:
     branches: [ "master", "piercus" ]
-    paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/linux-build.yml' ]
+    paths: ['src/**', 'deno.json', '.github/workflows/linux-build.yml' ]
 
 #env:
 #  OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION : 4.7.0
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        # node-version: [14.x, 16.x, 18.x]
-        node-version: [20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    #- name: Install cmake
-    #  run: sudo apt-get install -y cmake
     - uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2
+    - uses: denoland/setup-deno@v1
       with:
-        version: 8.14.0
-        run_install: |
-         - recursive: true
-           args: [--frozen-lockfile, --strict-peer-dependencies]         
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
-    - run: pnpm run build
-    - name: node bin/main.js --version 4.9.0
-      run: node bin/main.js 
-    - run: pnpm test
+        deno-version: v1.x
+    - name: deno run -A main.ts --version 4.9.0
+      run: deno run -A main.ts --version 4.9.0
+    - run: deno test -A

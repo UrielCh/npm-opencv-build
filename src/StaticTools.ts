@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { getDirname, getEnv, setEnv } from "./env";
-import { OpenCVBuildEnvParams } from "./misc";
-import * as detector from "./helper/detect";
-import { AutoBuildFile } from "./types";
-import Log from "./Log";
-import { highlight } from "./utils";
+import { getDirname, getEnv, setEnv } from "./env.ts";
+import { OpenCVBuildEnvParams } from "./misc.ts";
+import * as detector from "./helper/detect.ts";
+import { AutoBuildFile } from "./types.ts";
+import Log from "./Log.ts";
+import { highlight } from "./utils.ts";
 
 export interface BuildDesc {
   autobuild: string;
@@ -34,7 +34,8 @@ class StaticTools {
   }
 
   public getPackageJson(): string {
-    return path.resolve(process.cwd(), "package.json");
+    // return path.resolve(process.cwd(), "package.json");
+    return Deno.realPathSync(Deno.cwd() + "/package.json");
   }
 
   /**

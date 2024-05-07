@@ -2,8 +2,8 @@ import fs, { Stats } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { formatNumber, highlight, isCudaAvailable } from "./utils";
-import { AutoBuildFile, EnvSummery } from "./types";
+import { formatNumber, highlight, isCudaAvailable } from "./utils.ts";
+import { AutoBuildFile, EnvSummery } from "./types.ts";
 import {
   ALLARGS,
   ArgInfo,
@@ -14,13 +14,13 @@ import {
   OpenCVBuildEnvParamsString,
   OpencvModulesType,
   OpenCVPackageBuildOptions,
-} from "./misc";
-import { ALL_OPENCV_MODULES } from "./misc";
-import pc from "picocolors";
-import * as detector from "./helper/detect";
-import { getEnv, Platfrm, setEnv } from "./env";
-import Log from "./Log";
-import StaticTools from "./StaticTools";
+} from "./misc.ts";
+import { ALL_OPENCV_MODULES } from "./misc.ts";
+import * as detector from "./helper/detect.ts";
+import { getEnv, Platfrm, setEnv } from "./env.ts";
+import Log from "./Log.ts";
+import StaticTools from "./StaticTools.ts";
+import { pc } from "../deps.ts";
 
 function toBool(value?: string | null) {
   if (!value) {
@@ -146,7 +146,7 @@ export default class OpenCVBuildEnv
 
   constructor(private opts = {} as OpenCVBuildEnvParams) {
     this.prebuild = opts.prebuild;
-    this.packageRoot = opts.rootcwd || getEnv("INIT_CWD") || process.cwd();
+    this.packageRoot = opts.rootcwd || getEnv("INIT_CWD") || Deno.cwd(); // process.cwd();
     this.buildRoot = StaticTools.getBuildDir(opts);
     // get project Root path to looks for package.json for opencv4nodejs section
     try {
@@ -431,7 +431,7 @@ export default class OpenCVBuildEnv
         let stats: Stats;
         try {
           stats = fs.statSync(value);
-        } catch (e) {
+        } catch (_e) {
           errors.push(`${varname} is set to non existing "${value}"`);
           continue;
         }

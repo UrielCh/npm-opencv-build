@@ -1,8 +1,8 @@
 name: Use openCV from Chocolatey
 on:
    push:
-     branches: [ "never", "test" ]
-     paths: ['src/**', 'dist/**', 'package.json', 'pnpm-lock.yaml', 'pnpmfile.js', 'test/**', 'bin/**', 'scripts/**', '.github/workflows/w64-detect.yml' ]
+     branches: [ "never", "test", "deno" ]
+     paths: ['src/**', 'deno.json', '*.ts', '.github/workflows/w64-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]
 jobs:
@@ -20,24 +20,12 @@ jobs:
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     steps:
     - uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2
+    - uses: denoland/setup-deno@v1
       with:
-        version: 8.14.0
-        run_install: |
-         - recursive: true
-           args: [--frozen-lockfile, --strict-peer-dependencies]
-
+        deno-version: v1.x
     - name: Install OpenCV ${{ matrix.opencv_version }}
       run: |
         choco install OpenCV -y --version ${{ matrix.opencv_version }}
-
-    - name: Use Node.js 20
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
-        cache: 'pnpm'
-    - run: pnpm run build
-    #  --prebuild=latestBuild
     - name: Detect OpenCV
-      run: node bin/main.js --verbose
-    - run: pnpm test
+      run: deno run -A main.ts --verbose
+    - run: deno test -A
