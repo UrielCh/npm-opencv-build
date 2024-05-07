@@ -40,7 +40,7 @@ export async function findMSBuild(): Promise<PathVersion[]> {
     Log.log(
       "warn",
       "find-msbuild",
-      `find ${formatNumber("" + matches.length)} MSBuild version: [${
+      `find ${formatNumber(matches.length)} MSBuild version: [${
         matches.map((path) => light(path)).join(", ")
       }]`,
     );

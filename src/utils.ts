@@ -21,19 +21,19 @@ export function toExecCmd(bin: string, args: string[]) {
 }
 
 export function highlight(text: string): string {
-  return pc.bold(pc.yellow(text));
+  return pc.bold(pc.yellow(String(text)));
 }
 
 export function light(text: string): string {
-  return pc.yellow(text);
+  return pc.yellow(String(text));
 }
 
 export function formatRed(text: string): string {
-  return pc.red(text);
+  return pc.red(String(text));
 }
 
-export function formatNumber(text: string): string {
-  return pc.bold(pc.green(text));
+export function formatNumber(text: string | number): string {
+  return pc.bold(pc.green(String(text)));
 }
 
 export function exec(
