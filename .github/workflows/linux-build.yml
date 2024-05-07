@@ -3,10 +3,10 @@ name: build openCV on ubuntu
 on:
   push:
     branches: [ "master", "piercus", "test", "deno" ]
-    paths: ['src/**', '.github/workflows/linux-build.yml' ]
+    paths: ['src/**', 'deno.json', '.github/workflows/linux-build.yml' ]
   pull_request:
     branches: [ "master", "piercus" ]
-    paths: ['src/**', '.github/workflows/linux-build.yml' ]
+    paths: ['src/**', 'deno.json', '.github/workflows/linux-build.yml' ]
 
 #env:
 #  OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION : 4.7.0

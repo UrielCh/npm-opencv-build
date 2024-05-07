@@ -2,7 +2,7 @@ name: Use OpenCV from Brew
 on:
    push:
      branches: [ "never", "master", "deno" ]
-     paths: ['src/**', '*.ts', '.github/workflows/mac-detect.yml' ]
+     paths: ['src/**', 'deno.json', '*.ts', '.github/workflows/mac-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]
 jobs:
