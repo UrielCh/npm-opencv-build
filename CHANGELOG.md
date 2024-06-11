@@ -1,5 +1,10 @@
 # Changelog
 
+## V 1.0.0
+
+- new project configuration as ESM by default
+- new eslint configuration
+
 ## V 0.9.3
 
 - export .d.ts file twice, to avoid ESM / CJS warnings

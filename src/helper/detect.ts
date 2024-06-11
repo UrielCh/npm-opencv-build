@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { globSync } from "glob";
-import { highlight } from "../utils";
-import { Platfrm, setEnv } from "../env";
+import { highlight } from "../utils.js";
+import { Platfrm, setEnv } from "../env.js";
 
 export const summery = new Set<string>();
 

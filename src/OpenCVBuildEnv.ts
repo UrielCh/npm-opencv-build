@@ -2,25 +2,29 @@ import fs, { Stats } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { formatNumber, highlight, isCudaAvailable } from "./utils";
-import { AutoBuildFile, EnvSummery } from "./types";
+import { formatNumber, highlight, isCudaAvailable } from "./utils.js";
+import type { AutoBuildFile, EnvSummery } from "./types.js";
 import {
   ALLARGS,
-  ArgInfo,
   MODEULES_MAP,
   OPENCV_PATHS_ENV,
+} from "./misc.js";
+import type {
+  ArgInfo,
   OpenCVBuildEnvParams,
   OpenCVBuildEnvParamsBool,
   OpenCVBuildEnvParamsString,
   OpencvModulesType,
   OpenCVPackageBuildOptions,
-} from "./misc";
-import { ALL_OPENCV_MODULES } from "./misc";
+} from "./misc.js";
+
+
+import { ALL_OPENCV_MODULES } from "./misc.js";
 import pc from "picocolors";
-import * as detector from "./helper/detect";
-import { getEnv, Platfrm, setEnv } from "./env";
-import Log from "./Log";
-import StaticTools from "./StaticTools";
+import * as detector from "./helper/detect.js";
+import { getEnv, Platfrm, setEnv } from "./env.js";
+import Log from "./Log.js";
+import StaticTools from "./StaticTools.js";
 
 function toBool(value?: string | null) {
   if (!value) {
@@ -234,7 +238,7 @@ export default class OpenCVBuildEnv
       // merge -DBUILD_opencv_ to internal BUILD_opencv_ manager
       if (flagStr) {
         const flags = flagStr.split(/\s+/);
-        flags.filter((flag) => {
+        flags.filter((flag: string) => {
           if (flag.startsWith("-DBUILD_opencv_")) {
             // eslint-disable-next-line prefer-const
             let [mod, activated] = flag.substring(15).split("=");

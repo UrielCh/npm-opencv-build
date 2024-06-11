@@ -4,7 +4,7 @@ import { EOL } from "node:os";
 import path from "node:path";
 import log from "npmlog";
 import pc from "picocolors";
-import { getEnv, Platfrm } from "./env";
+import { getEnv, Platfrm } from "./env.js";
 
 /**
  * excape spaces for shell execution

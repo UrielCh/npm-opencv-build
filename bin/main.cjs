@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-const OpenCVBuilder = require("../dist/cjs/OpenCVBuilder.js");
+const OpenCVBuilder = require("../cjs/src/OpenCVBuilder.js");
 const builder = new OpenCVBuilder.OpenCVBuilder(process.argv);
 void builder.install();

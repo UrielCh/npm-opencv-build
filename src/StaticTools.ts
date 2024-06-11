@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { getDirname, getEnv, setEnv } from "./env";
-import { OpenCVBuildEnvParams } from "./misc";
-import * as detector from "./helper/detect";
-import { AutoBuildFile } from "./types";
-import Log from "./Log";
-import { highlight } from "./utils";
+import { getDirname, getEnv, setEnv } from "./env.js";
+import type { OpenCVBuildEnvParams } from "./misc.js";
+import * as detector from "./helper/detect.js";
+import type { AutoBuildFile } from "./types.js";
+import Log from "./Log.js";
+import { highlight } from "./utils.js";
 
 export interface BuildDesc {
   autobuild: string;

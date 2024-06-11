@@ -1,18 +1,18 @@
 import fs from "node:fs";
-import * as utils from "./utils";
-import type { AutoBuildFile } from "./types";
-import { getLibsFactory } from "./getLibsFactory";
-import { SetupOpencv } from "./setupOpencv";
-import { Constant } from "./constants";
-import OpenCVBuildEnv from "./OpenCVBuildEnv";
+import * as utils from "./utils.js";
+import type { AutoBuildFile } from "./types.js";
+import { getLibsFactory } from "./getLibsFactory.js";
+import { SetupOpencv } from "./setupOpencv.js";
+import { Constant } from "./constants.js";
+import OpenCVBuildEnv from "./OpenCVBuildEnv.js";
 import {
   args2Option,
   genHelp,
   OPENCV_PATHS_ENV,
-  OpenCVBuildEnvParams,
-} from "./misc";
+  type OpenCVBuildEnvParams,
+} from "./misc.js";
 import npmlog from "npmlog";
-import Log from "./Log";
+import Log from "./Log.js";
 
 export class OpenCVBuilder {
   public readonly constant: Constant;

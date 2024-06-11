@@ -2,11 +2,11 @@
 import { type OpenCVBuildEnvParams } from "../";
 // import { OpenCVBuildEnv, OpenCVBuilder } from '../dist/cjs/index'
 import { OpenCVBuildEnv, OpenCVBuilder } from "../";
-import chai, { expect } from "chai";
+// import chai, { expect } from "chai";
 import { Platfrm } from "../src/env";
 // import path from 'path';
 
-chai.use(require("chai-string"));
+// chai.use(require("chai-string"));
 
 export class FakeOpenCVBuildEnv extends OpenCVBuildEnv {
   constructor(opts: OpenCVBuildEnvParams) {

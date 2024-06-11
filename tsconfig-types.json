@@ -4,9 +4,10 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2022",
-    "outDir": "esm/src",
-    "declaration": false,
-    "verbatimModuleSyntax": true,
-    "declarationMap": false
+    "outDir": "types",
+    "declaration": true,
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
+    "verbatimModuleSyntax": true
   }
 }

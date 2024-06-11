@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import OpenCVBuilder from "./OpenCVBuilder";
-import type { OpencvModule } from "./types";
-import { OpencvModulesType } from "./misc";
-import { Platfrm } from "./env";
+import OpenCVBuilder from "./OpenCVBuilder.js";
+import type { OpencvModule } from "./types.js";
+import type { OpencvModulesType } from "./misc.js";
+import { Platfrm } from "./env.js";
 
 export class getLibsFactory {
   libFiles: string[] = [];
