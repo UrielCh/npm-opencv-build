@@ -38,5 +38,5 @@ jobs:
     - run: pnpm run build
     #  --prebuild=latestBuild
     - name: Detect OpenCV
-      run: node bin/main.js --verbose
+      run: node bin/main.cjs --verbose
     - run: pnpm test

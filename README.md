@@ -75,13 +75,13 @@ It's possible to specify build environment variables by passing argument to the
 builder script
 
 ```bash
-node lib/main.js --version 4.5.5 --buildRoot ~/openCV
+node lib/main.cjs --version 4.5.5 --buildRoot ~/openCV
 ```
 
 with flags, do not forget the quotes `"`
 
 ```bash
-node lib/main.js --version 4.5.5 --buildRoot ~/openCV --flags "-DOPENCV_GENERATE_PKGCONFIG=ON -DOPENCV_PC_FILE_NAME=opencv.pc"
+node lib/main.cjs --version 4.5.5 --buildRoot ~/openCV --flags "-DOPENCV_GENERATE_PKGCONFIG=ON -DOPENCV_PC_FILE_NAME=opencv.pc"
 ```
 
 Using the bin alias
@@ -109,7 +109,7 @@ export OPENCV4NODEJS_AUTOBUILD_FLAGS="-DOPENCV_GENERATE_PKGCONFIG=ON -DOPENCV_PC
 export OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION="4.6.0"
 export OPENCV_BUILD_ROOT="~/openCV"
 
-node build/main.js
+node build/main.cjs
 ```
 
 ### prebuild

@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv-build",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "A simple script to auto build recent OpenCV + contrib version via npm 2024 Edition",
   "main": "cjs/src/index.js",
@@ -34,7 +34,7 @@
     "test": "cross-env NODE_OPTIONS=\"-r ts-node/register --no-warnings\" TS_NODE_PROJECT=tsconfig-cjs.json mocha 'test/**/*.test.ts'",
     "ncu": "npx --yes npm-check-updates -i",
     "export": "npx --yes @arethetypeswrong/cli $(npm pack)",
-    "exportWin": "npm pack && npx --yes @arethetypeswrong/cli u4-opencv-build-1.0.0.tgz"
+    "exportWin": "npm pack && npx --yes @arethetypeswrong/cli u4-opencv-build-1.1.0.tgz"
   },
   "bin": {
     "opencv-build-npm": "bin/main.cjs"
