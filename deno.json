@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@denodnt/logger": "jsr:@deno-lib/logger@^1.1.6",
+    "@deno/dnt": "jsr:@deno/dnt@^0.41.2",
+    "@std/assert": "jsr:@std/assert@^0.226.0",
+    "@std/fmt": "jsr:@std/fmt@^0.225.4"
+  },
+  "node": true,
+  "lock": false
+}

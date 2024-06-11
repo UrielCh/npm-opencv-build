@@ -2,13 +2,13 @@ import fs, { type Stats } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { formatNumber, highlight, isCudaAvailable } from "./utils.js";
-import type { AutoBuildFile, EnvSummery } from "./types.js";
+import { formatNumber, highlight, isCudaAvailable } from "./utils.ts";
+import type { AutoBuildFile, EnvSummery } from "./types.ts";
 import {
   ALLARGS,
   MODEULES_MAP,
   OPENCV_PATHS_ENV,
-} from "./misc.js";
+} from "./misc.ts";
 import type {
   ArgInfo,
   OpenCVBuildEnvParams,
@@ -16,15 +16,14 @@ import type {
   OpenCVBuildEnvParamsString,
   OpencvModulesType,
   OpenCVPackageBuildOptions,
-} from "./misc.js";
+} from "./misc.ts";
 
-
-import { ALL_OPENCV_MODULES } from "./misc.js";
-import pc from "picocolors";
-import * as detector from "./helper/detect.js";
-import { getEnv, Platfrm, setEnv } from "./env.js";
-import Log from "./Log.js";
-import StaticTools from "./StaticTools.js";
+import { ALL_OPENCV_MODULES } from "./misc.ts";
+import * as detector from "./helper/detect.ts";
+import { getEnv, Platfrm, setEnv } from "./env.ts";
+import Log from "./Log.ts";
+import StaticTools from "./StaticTools.ts";
+import { pc } from "../deps.ts";
 
 function toBool(value?: string | null) {
   if (!value) {
@@ -150,7 +149,7 @@ export default class OpenCVBuildEnv
 
   constructor(private opts = {} as OpenCVBuildEnvParams) {
     this.prebuild = opts.prebuild;
-    this.packageRoot = opts.rootcwd || getEnv("INIT_CWD") || process.cwd();
+    this.packageRoot = opts.rootcwd || getEnv("INIT_CWD") || Deno.cwd(); // process.cwd();
     this.buildRoot = StaticTools.getBuildDir(opts);
     // get project Root path to looks for package.json for opencv4nodejs section
     try {
@@ -238,7 +237,7 @@ export default class OpenCVBuildEnv
       // merge -DBUILD_opencv_ to internal BUILD_opencv_ manager
       if (flagStr) {
         const flags = flagStr.split(/\s+/);
-        flags.filter((flag: string) => {
+        flags.filter((flag) => {
           if (flag.startsWith("-DBUILD_opencv_")) {
             // eslint-disable-next-line prefer-const
             let [mod, activated] = flag.substring(15).split("=");
@@ -435,7 +434,7 @@ export default class OpenCVBuildEnv
         let stats: Stats;
         try {
           stats = fs.statSync(value);
-        } catch (e) {
+        } catch (_e) {
           errors.push(`${varname} is set to non existing "${value}"`);
           continue;
         }

@@ -1,7 +1,3 @@
 node_modules
 opencv-*/
-*log
-esm/src
-cjs/src
-types
-*.tgz
+npm/

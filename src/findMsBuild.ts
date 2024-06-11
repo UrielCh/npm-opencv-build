@@ -1,8 +1,8 @@
 import path from "node:path";
-import { globSync } from "glob";
-import { execFile, formatNumber, highlight, light } from "./utils.js";
-import { getEnv } from "./env.js";
-import { log } from "./Log.js";
+import { globSync } from "npm:glob";
+import Log from "./Log.ts";
+import { execFile, formatNumber, highlight, light } from "./utils.ts";
+import { getEnv } from "./env.ts";
 
 export interface PathVersion {
   version: number;
@@ -37,20 +37,22 @@ export async function findMSBuild(): Promise<PathVersion[]> {
     );
   }
   if (matches.length > 1) {
-    log.warn(
+    Log.log(
+      "warn",
       "find-msbuild",
-      `find ${formatNumber("" + matches.length)} MSBuild version: [${
+      `find ${formatNumber(matches.length)} MSBuild version: [${
         matches.map((path) => light(path)).join(", ")
       }]`,
     );
   }
   const pbuilds = matches.map(async (selected: string) => {
-    log.silly("find-msbuild", matches.join(", "));
+    Log.log("silly", "find-msbuild", matches.join(", "));
     // const selected = matches[matches.length - 1];
     const txt = await execFile(selected, ["/version"]);
     const m = txt.match(/(\d+)\.\d+/);
     if (!m) {
-      log.warn(
+      Log.log(
+        "warn",
         "find-msbuild",
         `${selected} is not a valid msbuild path, can not find it's versdion`,
       );
@@ -60,7 +62,8 @@ export async function findMSBuild(): Promise<PathVersion[]> {
       };
     }
     //   return Promise.reject('fail to get MSBuild.exe version number');
-    log.info(
+    Log.log(
+      "info",
       "find-msbuild",
       `discover msbuild v${formatNumber("%s")} in ${highlight("%s")}`,
       m[1],

@@ -1,17 +1,17 @@
 import fs from "node:fs";
-import * as utils from "./utils.js";
-import type { AutoBuildFile } from "./types.js";
-import { getLibsFactory } from "./getLibsFactory.js";
-import { SetupOpencv } from "./setupOpencv.js";
-import { Constant } from "./constants.js";
-import OpenCVBuildEnv from "./OpenCVBuildEnv.js";
+import * as utils from "./utils.ts";
+import type { AutoBuildFile } from "./types.ts";
+import { getLibsFactory } from "./getLibsFactory.ts";
+import { SetupOpencv } from "./setupOpencv.ts";
+import { Constant } from "./constants.ts";
+import OpenCVBuildEnv from "./OpenCVBuildEnv.ts";
 import {
   args2Option,
   genHelp,
   OPENCV_PATHS_ENV,
-  type OpenCVBuildEnvParams,
-} from "./misc.js";
-import Log, {loggger} from "./Log.js";
+  OpenCVBuildEnvParams,
+} from "./misc.ts";
+import Log, {logger} from "./Log.ts";
 
 export class OpenCVBuilder {
   public readonly constant: Constant;
@@ -22,13 +22,14 @@ export class OpenCVBuilder {
     if (Array.isArray(opts)) {
       opts = args2Option(opts);
       if (opts.verbose) {
-        loggger.enableConsole();
-        // npmlog.level === "verbose";
+        logger.enableConsole();
+        // Log.level = "verbose";
       }
       if (opts.extra && (opts.extra.help || opts.extra.h)) {
         console.log("npm-opencv-build usage:");
         console.log(genHelp());
-        process.exit(1);
+        Deno.exit(1);
+        // process.exit(1);
       }
     }
     if (opts instanceof OpenCVBuildEnv) {
@@ -204,7 +205,8 @@ export class OpenCVBuilder {
       } else {
         Log.log("error", "install", JSON.stringify(err));
       }
-      process.exit(1);
+      Deno.exit(1);
+      // process.exit(1);
     }
   }
 }

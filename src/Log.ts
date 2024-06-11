@@ -1,8 +1,7 @@
-// import log, { type LogLevels } from "npmlog";
 import Logger from "@denodnt/logger";
 
-export type LogLevels = "info" | "warn" | "error";
-export const loggger = new Logger();
+export type LogLevels = "silly" | "verbose" | "info" | "warn" | "error";
+export const logger = new Logger();
 
 export default class Log {
   public static silence: boolean;
@@ -16,16 +15,16 @@ export default class Log {
     if (!Log.silence) {
       switch (level) {
         case "info":
-          loggger.info(prefix, message, ...args);
+          logger.info(prefix, message, ...args);
           break;
         case "warn":
-          loggger.warn(prefix, message, ...args);
+          logger.warn(prefix, message, ...args);
           break;
         case "error":
-          loggger.error(prefix, message, ...args);
+          logger.error(prefix, message, ...args);
           break;
         default:
-          loggger.info(prefix, message, ...args);
+          logger.info(prefix, message, ...args);
           break;
       }
       // log.log(level, prefix, message, ...args);
@@ -33,25 +32,41 @@ export default class Log {
   }
 
   info(...args: unknown[]): Promise<void> {
-    return loggger.info(...args);
+    if (Log.silence) {
+      return Promise.resolve();
+    }
+    return logger.info(...args);
   }
 
   warn(...args: unknown[]): Promise<void> {
-    return loggger.warn(...args);
+    if (Log.silence) {
+      return Promise.resolve();
+    }
+    return logger.warn(...args);
   }
 
   error(...args: unknown[]): Promise<void> {
-    return loggger.error(...args);
+    if (Log.silence) {
+      return Promise.resolve();
+    }
+    return logger.error(...args);
   }
 
   silly(...args: unknown[]): Promise<void> {
-    return loggger.info(...args);
+    if (Log.silence) {
+      return Promise.resolve();
+    }
+    return logger.info(...args);
   }
 
   verbose(...args: unknown[]): Promise<void> {
-    return loggger.info(...args);
+    if (Log.silence) {
+      return Promise.resolve();
+    }
+    return logger.info(...args);
   }
 
+  public static set level(level: LogLevels) {
+  //  npmlog.level = level;
+  }
 }
-
-export const log = new Log();
