@@ -18,6 +18,6 @@ jobs:
     - uses: denoland/setup-deno@v1
       with:
         deno-version: v1.x
-    - name: deno run -A main.ts --version 4.9.0
-      run: deno run -A main.ts --version 4.9.0
+    - name: deno run -A main.ts --version 4.10.0
+      run: deno run -A main.ts --version 4.10.0
     - run: deno test -A

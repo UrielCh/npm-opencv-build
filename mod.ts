@@ -12,7 +12,7 @@ export {
   type OpencvModulesType,
 } from "./src/misc.ts";
 export { default as Log } from "./src/Log.ts";
-export type { LogLevels } from "npm:npmlog";
+export type { LogLevels } from "./src/Log.ts";
 export { default as StaticTools } from "./src/StaticTools.ts";
 export { Platfrm } from "./src/env.ts";
 export { pc } from "./deps.ts";

@@ -11,7 +11,7 @@ import {
   OPENCV_PATHS_ENV,
   OpenCVBuildEnvParams,
 } from "./misc.ts";
-import Log from "./Log.ts";
+import Log, {logger} from "./Log.ts";
 
 export class OpenCVBuilder {
   public readonly constant: Constant;
@@ -22,7 +22,8 @@ export class OpenCVBuilder {
     if (Array.isArray(opts)) {
       opts = args2Option(opts);
       if (opts.verbose) {
-        Log.level = "verbose";
+        logger.enableConsole();
+        // Log.level = "verbose";
       }
       if (opts.extra && (opts.extra.help || opts.extra.h)) {
         console.log("npm-opencv-build usage:");

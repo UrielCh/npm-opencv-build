@@ -80,18 +80,19 @@ export async function buildDnt() {
     },
     scripts: {
       "checkExports": "npx @arethetypeswrong/cli $(npm pack)",
-      "install_macm1": "node script/main.js --version 4.9.0 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\"",
-      "install_4_9_0_cuda_30XX": "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/main.js --keepsource --version 4.9.0 --cuda --cudaArch=8.6",
+      "install_macm1": "node script/main.js --version 4.10.0 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\"",
+      "install_4_9_0_cuda_30XX": "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/main.js --keepsource --version 4.10.0 --cuda --cudaArch=8.6",
     },
     "engine-strict": {
       node: ">=18",
     },
-    // dependencies: {
-    //   "picocolors": "1.0.0",
-    // },
-    devDependencies: {
-      "@types/npmlog": "^7.0.0",
+    dependencies: {
+      "@denodnt/logger": "^1.1.6",
+      // "picocolors": "1.0.0",
     },
+    //devDependencies: {
+    //  "@types/npmlog": "^7.0.0",
+    //},
   };
   await emptyDir("./npm");
 
@@ -142,6 +143,12 @@ export async function buildDnt() {
       //   version: "1.0.0",
       //   peerDependency: false,
       // },
+      // "jsr:@deno-lib/logger@^1.1.6": {
+      //    name: "@denodnt/logger",
+      //    version: "1.1.6",
+      //    peerDependency: false,
+      // },
+
     },
   });
 

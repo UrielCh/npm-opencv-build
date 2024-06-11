@@ -87,7 +87,7 @@ class StaticTools {
             true,
           ) as AutoBuildFile;
           return { autobuild, dir, hash, buildInfo, date: stats.mtime };
-        } catch (err) {
+        } catch (_err) {
           return {
             autobuild,
             dir,
