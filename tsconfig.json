@@ -7,6 +7,7 @@
     "outDir": "esm/src",
     "declaration": false,
     "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
     "declarationMap": false
   }
 }

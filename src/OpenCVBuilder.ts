@@ -11,8 +11,7 @@ import {
   OPENCV_PATHS_ENV,
   type OpenCVBuildEnvParams,
 } from "./misc.js";
-import npmlog from "npmlog";
-import Log from "./Log.js";
+import Log, {loggger} from "./Log.js";
 
 export class OpenCVBuilder {
   public readonly constant: Constant;
@@ -23,7 +22,8 @@ export class OpenCVBuilder {
     if (Array.isArray(opts)) {
       opts = args2Option(opts);
       if (opts.verbose) {
-        npmlog.level === "verbose";
+        loggger.enableConsole();
+        // npmlog.level === "verbose";
       }
       if (opts.extra && (opts.extra.help || opts.extra.h)) {
         console.log("npm-opencv-build usage:");

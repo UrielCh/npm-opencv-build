@@ -58,8 +58,8 @@
   },
   "homepage": "https://github.com/UrielCh/npm-opencv-build#readme",
   "dependencies": {
+    "@denodnt/logger": "^1.1.6",
     "glob": "^10.4.1",
-    "npmlog": "^7.0.1",
     "picocolors": "^1.0.1",
     "rimraf": "^5.0.7"
   },
@@ -67,7 +67,6 @@
     "@types/chai": "^4.3.16",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.14.2",
-    "@types/npmlog": "^7.0.0",
     "chai": "^5.1.1",
     "cross-env": "^7.0.3",
     "cross-var": "^1.1.0",
@@ -78,6 +77,9 @@
     "typescript-eslint": "8.0.0-alpha.30"
   },
   "files": [
-    "esm", "cjs", "types", "bin"
+    "esm",
+    "cjs",
+    "types",
+    "bin"
   ]
 }

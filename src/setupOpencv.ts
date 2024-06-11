@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "node:path";
-import log from "npmlog";
+import { log } from "./Log.js";
 import { rimraf } from "rimraf";
 import type { OpenCVBuilder } from "./OpenCVBuilder.js";
 import { findMSBuild, type PathVersion } from "./findMsBuild.js";
