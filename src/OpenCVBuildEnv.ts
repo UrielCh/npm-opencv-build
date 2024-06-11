@@ -324,7 +324,7 @@ export default class OpenCVBuildEnv
       const changes = StaticTools.autoLocatePrebuild();
       Log.log("info", "init", changes.summery.join("\n"));
     } else {
-      this.opencvVersion = this.getExpectedVersion("4.9.0");
+      this.opencvVersion = this.getExpectedVersion("4.10.0");
       Log.log(
         "info",
         "init",
