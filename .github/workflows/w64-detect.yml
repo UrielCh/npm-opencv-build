@@ -14,7 +14,7 @@ jobs:
       matrix:
         # node-version: [14.x, 16.x, 18.x]
         opencv_version:
-          - 4.9.0
+          - 4.10.0
           - 4.6.0
     env:
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
