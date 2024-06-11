@@ -2,6 +2,7 @@
   "compilerOptions": {
     "traceResolution": false,
     "removeComments": false,
+    "skipLibCheck": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,

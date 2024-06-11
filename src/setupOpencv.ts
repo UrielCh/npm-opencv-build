@@ -3,7 +3,7 @@ import { EOL } from "node:os";
 import path from "node:path";
 import log from "npmlog";
 import { rimraf } from "rimraf";
-import { OpenCVBuilder } from "./OpenCVBuilder.js";
+import type { OpenCVBuilder } from "./OpenCVBuilder.js";
 import { findMSBuild, type PathVersion } from "./findMsBuild.js";
 import type { AutoBuildFile } from "./types.js";
 import {

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import OpenCVBuilder from "./OpenCVBuilder.js";
+import type OpenCVBuilder from "./OpenCVBuilder.js";
 import type { OpencvModule } from "./types.js";
 import type { OpencvModulesType } from "./misc.js";
 import { Platfrm } from "./env.js";
