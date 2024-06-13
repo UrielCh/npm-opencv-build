@@ -67,6 +67,6 @@ export default class Log {
   }
 
   public static set level(level: LogLevels) {
-  //  npmlog.level = level;
+    //  npmlog.level = level;
   }
 }

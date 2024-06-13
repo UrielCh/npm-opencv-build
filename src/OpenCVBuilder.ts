@@ -11,7 +11,7 @@ import {
   OPENCV_PATHS_ENV,
   OpenCVBuildEnvParams,
 } from "./misc.ts";
-import Log, {logger} from "./Log.ts";
+import Log, { logger } from "./Log.ts";
 
 export class OpenCVBuilder {
   public readonly constant: Constant;

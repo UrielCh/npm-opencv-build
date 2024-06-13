@@ -75,7 +75,16 @@ class StaticTools {
    * @returns builds list
    */
   public listBuild(rootDir: string): Array<BuildDesc> {
-    const versions = fs.readdirSync(rootDir)
+    let workFolderContent: string[] = [];
+    try {
+      workFolderContent = fs.readdirSync(rootDir);
+    } catch (err) {
+      throw new Error(
+        "Failed to list directory: " + rootDir +
+          " Check environement variable OPENCV_BUILD_ROOT, " + err,
+      );
+    }
+    const versions = workFolderContent
       .filter((n) => n.startsWith("opencv-"))
       .map((dir) => {
         const autobuild = path.join(rootDir, dir, "auto-build.json");

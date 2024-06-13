@@ -3,6 +3,7 @@
 ## V 1.1.0
 
 - remove npmlog package
+- improve error message
 
 ## V 1.0.0
 

@@ -80,8 +80,10 @@ export async function buildDnt() {
     },
     scripts: {
       "checkExports": "npx @arethetypeswrong/cli $(npm pack)",
-      "install_macm1": "node script/main.js --version 4.10.0 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\"",
-      "install_4_9_0_cuda_30XX": "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/main.js --keepsource --version 4.10.0 --cuda --cudaArch=8.6",
+      "install_macm1":
+        'node script/main.js --version 4.10.0 --flag="-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64"',
+      "install_4_9_0_cuda_30XX":
+        "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/main.js --keepsource --version 4.10.0 --cuda --cudaArch=8.6",
     },
     "engine-strict": {
       node: ">=18",
@@ -104,11 +106,12 @@ export async function buildDnt() {
         path: "mod.ts",
       },
       {
-      kind: "bin",
-      name: "opencv-build-npm",
-      path: "main.ts",
-      // path: "script/main.js",
-    }],
+        kind: "bin",
+        name: "opencv-build-npm",
+        path: "main.ts",
+        // path: "script/main.js",
+      },
+    ],
     outDir: "./npm",
     test: true,
     // declaration: "separate",
@@ -148,7 +151,6 @@ export async function buildDnt() {
       //    version: "1.1.6",
       //    peerDependency: false,
       // },
-
     },
   });
 

@@ -4,11 +4,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { formatNumber, highlight, isCudaAvailable } from "./utils.ts";
 import type { AutoBuildFile, EnvSummery } from "./types.ts";
-import {
-  ALLARGS,
-  MODEULES_MAP,
-  OPENCV_PATHS_ENV,
-} from "./misc.ts";
+import { ALLARGS, MODEULES_MAP, OPENCV_PATHS_ENV } from "./misc.ts";
 import type {
   ArgInfo,
   OpenCVBuildEnvParams,
