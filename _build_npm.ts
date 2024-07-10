@@ -2,7 +2,7 @@
 import { build, emptyDir, type PackageJson } from "@deno/dnt";
 import { pc } from "./deps.ts";
 
-// deno run -A _build_npm.ts 1.0.0
+// deno run -A _build_npm.ts 1.1.1
 // cd npm
 // ncu -i
 export async function buildDnt() {

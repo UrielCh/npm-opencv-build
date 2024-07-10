@@ -1,5 +1,10 @@
 # Changelog
 
+## V 1.1.1
+- update deps versions
+
+## V 1.1.0
+
 ## V 1.0.0
 
 - project converted to deno
