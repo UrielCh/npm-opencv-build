@@ -1,0 +1,30 @@
+name: Use openCV from vcpkg
+on:
+   push:
+     branches: [ "never", "test", "deno" ]
+     paths: ['src/**', 'deno.json', '*.ts', '.github/workflows/vcpkg-detect.yml' ]
+#   pull_request:
+#     branches: [ "master" ]
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        # node-version: [14.x, 16.x, 18.x]
+        opencv_version:
+          - 4.8.0 # Do not known how to choose custom version using vcpkg
+    env:
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    steps:
+    - uses: actions/checkout@v4
+    - uses: denoland/setup-deno@v1
+      with:
+        deno-version: v1.x
+    - name: Install OpenCV ${{ matrix.opencv_version }}
+      run: |
+         vcpkg install opencv
+    - name: Detect OpenCV
+      run: deno run -A main.ts --verbose
+    - run: deno test -A
