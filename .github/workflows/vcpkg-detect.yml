@@ -1,7 +1,7 @@
 name: Use openCV from vcpkg
 on:
    push:
-     branches: [ "never", "test", "deno" ]
+     branches: [ "never", "test", "master" ]
      paths: ['src/**', 'deno.json', '*.ts', '.github/workflows/vcpkg-detect.yml' ]
 #   pull_request:
 #     branches: [ "master" ]
