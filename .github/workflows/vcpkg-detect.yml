@@ -22,9 +22,31 @@ jobs:
     - uses: denoland/setup-deno@v1
       with:
         deno-version: v1.x
+
     - name: Install OpenCV ${{ matrix.opencv_version }}
+      uses: brinkqiang/vcpkg-action@v1
+      id: vcpkg
+      with:
+        pkgs: opencv
+        triplet: x64-windows-release
+        token: ${{ github.token }}
+        github-binarycache: true
+
+    - name: Debug C:/vcpkg/packages
       run: |
-         vcpkg install opencv
+         dir C:/vcpkg/packages
+
+    - name: Debug C:/vcpkg/packages/opencv_x64-windows
+      run: |
+         dir C:/vcpkg/packages/opencv_x64-windows
+
+    - name: Debug C:/vcpkg/packages/opencv_x64-windows/share
+      run: |
+         dir C:/vcpkg/packages/opencv_x64-windows/share
+
+    #- name: Install OpenCV ${{ matrix.opencv_version }}
+    #  run: |
+    #     vcpkg install opencv
     - name: Detect OpenCV
       run: deno run -A main.ts --verbose
     - run: deno test -A
