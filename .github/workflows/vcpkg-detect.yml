@@ -36,17 +36,17 @@ jobs:
       run: |
          dir C:\
 
-    - name: Debug D:\
+    - name: Debug D:\a
       run: |
-         dir D:\
+         dir D:\a
 
     - name: Debug C:/vcpkg
       run: |
          dir C:/vcpkg
 
-    - name: Debug C:/vcpkg/packages
+    - name: Debug C:/vcpkg/triplets
       run: |
-         dir C:/vcpkg/packages
+         dir C:/vcpkg/triplets
 
     - name: Debug C:/vcpkg/packages/opencv_x64-windows
       run: |
