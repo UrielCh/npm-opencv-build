@@ -32,6 +32,18 @@ jobs:
         token: ${{ github.token }}
         github-binarycache: true
 
+    - name: Debug C:\
+      run: |
+         dir C:\
+
+    - name: Debug D:\
+      run: |
+         dir D:\
+
+    - name: Debug C:/vcpkg
+      run: |
+         dir C:/vcpkg
+
     - name: Debug C:/vcpkg/packages
       run: |
          dir C:/vcpkg/packages
