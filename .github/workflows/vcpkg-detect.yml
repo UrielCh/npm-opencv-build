@@ -32,34 +32,9 @@ jobs:
         token: ${{ github.token }}
         github-binarycache: true
 
-    - name: Debug install opencv
+    - name: vcpkg install opencv
       run: |
          vcpkg install opencv
-
-    - name: Debug list
-      run: |
-         vcpkg list
-        
-    - name: Debug C:/vcpkg
-      run: |
-         dir C:/vcpkg
-
-    - name: Debug C:/vcpkg/installed
-      run: |
-         dir C:/vcpkg/installed
-
-
-    - name: Debug C:\vcpkg\packages
-      run: |
-         dir C:\vcpkg\packages
-
-    - name: Debug C:\vcpkg\packages\opencv4_x64-windows
-      run: |
-         dir C:\vcpkg\packages\opencv4_x64-windows
-
-    - name: Debug C:\vcpkg\packages\opencv4_x64-windows\bin
-      run: |
-          dir C:\vcpkg\packages\opencv4_x64-windows\bin
 
     #- name: Install OpenCV ${{ matrix.opencv_version }}
     #  run: |
