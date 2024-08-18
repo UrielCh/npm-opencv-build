@@ -44,9 +44,9 @@ jobs:
       run: |
          dir C:/vcpkg
 
-    - name: Debug ${{ github.workspace }}\vcpkg
+    - name: Debug C:/vcpkg/installed
       run: |
-         dir ${{ github.workspace }}\vcpkg
+         dir C:/vcpkg/installed
 
     #- name: Install OpenCV ${{ matrix.opencv_version }}
     #  run: |
