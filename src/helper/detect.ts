@@ -30,9 +30,17 @@ export function detect(): {
 export function detectBinDir(): string {
   // chocolatey
   if (Platfrm.isWindows) {
-    const lookup = "c:/tools/opencv/build/x64/vc*/bin";
+    const lookups = [
+      // chocolatey
+      "c:/tools/opencv/build/x64/vc*/bin",
+      // vcpkg
+      "c:/vcpkg/packages/opencv4_x64-windows/bin"
+    ];
     // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\bin", "c:\\tools\\opencv\\build\\x64\\vc16\\bin"];
-    const candidates = globSync(lookup);
+    let candidates: string[] = [];
+    for (const lookup of lookups) {
+      candidates = [...candidates, ...globSync(lookup)];
+    }
     let fnd = false;
     for (const candidate of candidates) {
       if (fs.existsSync(candidate)) {
@@ -43,8 +51,7 @@ export function detectBinDir(): string {
     }
     if (!fnd) {
       summery.add(
-        `failed to resolve OPENCV_BIN_DIR from ${lookup} => ${
-          candidates.join(",")
+        `failed to resolve OPENCV_BIN_DIR from ${lookup} => ${candidates.join(",")
         }`,
       );
     }
@@ -79,10 +86,18 @@ export function detectBinDir(): string {
 
 export function detectLibDir(): string {
   if (Platfrm.isWindows) {
-    // chocolatey
-    const lookup = "c:/tools/opencv/build/x64/vc*/lib";
-    // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\lib", "c:\\tools\\opencv\\build\\x64\\vc16\\lib"]
-    const candidates = globSync(lookup); // blob looks broken
+    const lookups = [
+      // chocolatey
+      "c:/tools/opencv/build/x64/vc*/lib",
+      // vcpkg
+      "c:/vcpkg/packages/opencv4_x64-windows/lib"
+    ];
+    // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\bin", "c:\\tools\\opencv\\build\\x64\\vc16\\bin"];
+    let candidates: string[] = [];
+    for (const lookup of lookups) {
+      candidates = [...candidates, ...globSync(lookup)];
+    }
+
     let fnd = false;
     for (const candidate of candidates) {
       if (fs.existsSync(candidate)) {
@@ -93,8 +108,7 @@ export function detectLibDir(): string {
     }
     if (!fnd) {
       summery.add(
-        `failed to resolve OPENCV_LIB_DIR from ${lookup} => ${
-          candidates.join(",")
+        `failed to resolve OPENCV_LIB_DIR from ${lookup} => ${candidates.join(",")
         }`,
       );
     }
@@ -136,14 +150,20 @@ export function detectLibDir(): string {
  */
 export function detectIncludeDir(): string {
   if (Platfrm.isWindows) {
-    // chocolatey
-    const candidate = "c:\\tools\\opencv\\build\\include";
-    if (fs.existsSync(candidate)) {
-      summery.add("OPENCV_INCLUDE_DIR resolved");
-      return candidate;
-    } else {
-      summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${candidate}`);
+    const candidates = [
+      // chocolatey
+      "c:\\tools\\opencv\\build\\include",
+      // vcpkg
+      "c:\\vcpkg\\packages\\opencv4_x64-windows\\include"
+    ];
+
+    for (const candidate of candidates) {
+      if (fs.existsSync(candidate)) {
+        summery.add("OPENCV_INCLUDE_DIR resolved");
+        return candidate;
+      }
     }
+    summery.add(`failed to resolve OPENCV_INCLUDE_DIR from ${candidates.join(', ')}`);
   } else if (Platfrm.isLinux) {
     const candidate = "/usr/include/opencv4/";
     if (fs.existsSync(candidate)) {
