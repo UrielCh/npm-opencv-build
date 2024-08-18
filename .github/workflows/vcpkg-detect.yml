@@ -32,9 +32,9 @@ jobs:
         token: ${{ github.token }}
         github-binarycache: true
 
-    - name: Debug C:\
+    - name: Debug vcpkg list
       run: |
-         dir C:\
+         vcpkg list
 
     - name: Debug D:\a
       run: |
@@ -44,17 +44,9 @@ jobs:
       run: |
          dir C:/vcpkg
 
-    - name: Debug C:/vcpkg/triplets
+    - name: Debug ${{ github.workspace }}\vcpkg
       run: |
-         dir C:/vcpkg/triplets
-
-    - name: Debug C:/vcpkg/packages/opencv_x64-windows
-      run: |
-         dir C:/vcpkg/packages/opencv_x64-windows
-
-    - name: Debug C:/vcpkg/packages/opencv_x64-windows/share
-      run: |
-         dir C:/vcpkg/packages/opencv_x64-windows/share
+         dir ${{ github.workspace }}\vcpkg
 
     #- name: Install OpenCV ${{ matrix.opencv_version }}
     #  run: |
