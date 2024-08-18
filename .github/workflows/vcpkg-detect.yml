@@ -32,14 +32,14 @@ jobs:
         token: ${{ github.token }}
         github-binarycache: true
 
-    - name: Debug vcpkg list
+    - name: Debug install opencv
+      run: |
+         vcpkg install opencv
+
+    - name: Debug list
       run: |
          vcpkg list
-
-    - name: Debug D:\a
-      run: |
-         dir D:\a
-
+        
     - name: Debug C:/vcpkg
       run: |
          dir C:/vcpkg
