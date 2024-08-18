@@ -1,5 +1,9 @@
 # Changelog
 
+## V 1.1.1
+
+- detect opencv from vcpkg setup
+
 ## V 1.1.0
 
 - remove npmlog package
