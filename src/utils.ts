@@ -52,7 +52,7 @@ export function exec(
 
 export function execSync(
   cmd: string,
-  options?: child_process.ExecOptions,
+  options?: child_process.ExecSyncOptionsWithStringEncoding,
 ): string {
   Log.log("silly", "install", "executing: %s", protect(cmd));
   const stdout = child_process.execSync(cmd, options);
