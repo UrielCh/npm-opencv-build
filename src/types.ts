@@ -25,3 +25,18 @@ export type AutoBuildFile = {
   modules: OpencvModule[];
   env: EnvSummery;
 };
+
+export interface OpenCVBuildInfo {
+  opencvVersion: string;
+  buildWithCuda: boolean;
+  isWithoutContrib: boolean;
+  isAutoBuildDisabled: boolean;
+  buildRoot: string;
+  cudaArch: string;
+  autoBuildFlags: string;
+  OPENCV_INCLUDE_DIR: string;
+  OPENCV_LIB_DIR: string;
+  OPENCV_BIN_DIR: string;
+  modules: OpencvModule[];
+  libs: string[];
+}

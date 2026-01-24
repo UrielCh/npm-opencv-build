@@ -10,6 +10,7 @@ export interface OpenCVBuildEnvParamsBool {
   verbose?: boolean;
   "dry-run"?: boolean;
   "git-cache"?: boolean;
+  json?: boolean;
 }
 
 type boolKey = keyof OpenCVBuildEnvParamsBool;
@@ -208,6 +209,12 @@ export const ALLARGS = {
     env: "OPENCV_GIT_CACHE",
     isBool: true,
     doc: "Reduce Bandwide usage, by keeping a local git souce un the buildRoot",
+  } as ArgInfo,
+  json: {
+    arg: "json",
+    conf: "json",
+    isBool: true,
+    doc: "Output build configuration as JSON",
   } as ArgInfo,
 };
 /**
