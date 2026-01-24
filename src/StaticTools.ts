@@ -33,9 +33,9 @@ class StaticTools {
     return buildRoot;
   }
 
-  public getPackageJson(): string {
-    // return path.resolve(process.cwd(), "package.json");
-    return Deno.realPathSync(Deno.cwd() + "/package.json");
+  public getPackageJson(opts = {} as OpenCVBuildEnvParams): string {
+    const packageRoot = opts.rootcwd || getEnv("INIT_CWD") || Deno.cwd();
+    return Deno.realPathSync(packageRoot + "/package.json");
   }
 
   /**
@@ -171,11 +171,11 @@ class StaticTools {
   /**
    * extract opencv4nodejs section from package.json if available
    */
-  private parsePackageJson(): {
+  private parsePackageJson(opts = {} as OpenCVBuildEnvParams): {
     file: string;
     data: { opencv4nodejs?: { [key: string]: string | boolean | number } };
   } | null {
-    const absPath = this.getPackageJson();
+    const absPath = this.getPackageJson(opts);
     if (!fs.existsSync(absPath)) {
       return null;
     }
@@ -187,10 +187,10 @@ class StaticTools {
    * get opencv4nodejs section from package.json if available
    * @returns opencv4nodejs customs
    */
-  public readEnvsFromPackageJson(): {
+  public readEnvsFromPackageJson(opts = {} as OpenCVBuildEnvParams): {
     [key: string]: string | boolean | number;
   } | null {
-    const rootPackageJSON = this.parsePackageJson();
+    const rootPackageJSON = this.parsePackageJson(opts);
     if (!rootPackageJSON) {
       return null;
     }

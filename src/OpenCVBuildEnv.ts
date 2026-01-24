@@ -96,8 +96,6 @@ export default class OpenCVBuildEnv
   public rootcwd?: string;
   // Path to build all openCV libs
   public buildRoot: string;
-  // Path to find package.json legacy option
-  public packageRoot: string;
   // protected _platform: NodeJS.Platform;
   private no_autobuild: string;
 
@@ -145,11 +143,11 @@ export default class OpenCVBuildEnv
 
   constructor(private opts = {} as OpenCVBuildEnvParams) {
     this.prebuild = opts.prebuild;
-    this.packageRoot = opts.rootcwd || getEnv("INIT_CWD") || Deno.cwd(); // process.cwd();
+
     this.buildRoot = StaticTools.getBuildDir(opts);
     // get project Root path to looks for package.json for opencv4nodejs section
     try {
-      const data = StaticTools.readEnvsFromPackageJson();
+      const data = StaticTools.readEnvsFromPackageJson(opts);
       if (data === null && !this.prebuild) {
         Log.log(
           "info",
