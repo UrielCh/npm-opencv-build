@@ -89,6 +89,7 @@ export default class OpenCVBuildEnv
    */
   public dryRun = false;
   public gitCache = false;
+  public json = false;
   // root path to look for package.json opencv4nodejs section
   // deprecated directly infer your parameters to the constructor
   public autoBuildFlags: string;
@@ -372,6 +373,7 @@ export default class OpenCVBuildEnv
     this.keepsources = !!this.resolveValue(ALLARGS.keepsources);
     this.dryRun = !!this.resolveValue(ALLARGS["dry-run"]);
     this.gitCache = !!this.resolveValue(ALLARGS["git-cache"]);
+    this.json = !!this.resolveValue(ALLARGS.json);
 
     if (this.buildWithCuda && isCudaAvailable()) {
       this.#enabledModules.add("cudaarithm");

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import * as utils from "./utils.ts";
-import type { AutoBuildFile } from "./types.ts";
+import type { AutoBuildFile, OpenCVBuildInfo } from "./types.ts";
 import { getLibsFactory } from "./getLibsFactory.ts";
 import { SetupOpencv } from "./setupOpencv.ts";
 import { Constant } from "./constants.ts";
@@ -24,6 +24,9 @@ export class OpenCVBuilder {
       if (opts.verbose) {
         logger.enableConsole();
         // Log.level = "verbose";
+      }
+      if (opts.json) {
+        Log.silence = true;
       }
       if (opts.extra && (opts.extra.help || opts.extra.h)) {
         console.log("npm-opencv-build usage:");
@@ -89,6 +92,26 @@ export class OpenCVBuilder {
       );
     });
     return hasLibs;
+  }
+
+  public getBuildInfo(): OpenCVBuildInfo {
+    const env = this.env;
+    const modules = this.getLibs.getLibs();
+
+    return {
+      opencvVersion: env.opencvVersion,
+      buildWithCuda: env.buildWithCuda,
+      isWithoutContrib: env.isWithoutContrib,
+      isAutoBuildDisabled: env.isAutoBuildDisabled,
+      buildRoot: env.buildRoot,
+      cudaArch: env.cudaArch,
+      autoBuildFlags: env.autoBuildFlags,
+      OPENCV_INCLUDE_DIR: env.opencvIncludeDir,
+      OPENCV_LIB_DIR: env.opencvLibDir,
+      OPENCV_BIN_DIR: env.opencvBinDir,
+      modules: modules,
+      libs: modules.map((m) => m.libPath).filter((p): p is string => !!p),
+    };
   }
 
   async install(): Promise<void> {

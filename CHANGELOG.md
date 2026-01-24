@@ -1,5 +1,9 @@
 # Changelog
 
+## V 1.2.0
+
+- add --json flag to output build configuration (N-API support)
+
 ## V 1.1.1
 
 - detect opencv from vcpkg setup
