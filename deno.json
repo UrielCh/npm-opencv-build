@@ -1,4 +1,8 @@
 {
+  "name": "@u4/opencv-build",
+  "version": "1.2.0",
+  "license": "MIT",
+  "exports": "./mod.ts",
   "tasks": {
     "dev": "deno run --watch main.ts"
   },
@@ -6,9 +10,26 @@
     "@deno/dnt": "jsr:@deno/dnt@^0.41.3",
     "@denodnt/logger": "jsr:@deno-lib/logger@^1.1.6",
     "@std/assert": "jsr:@std/assert@^1.0.2",
-    "@std/fmt": "jsr:@std/fmt@^1.0.0"
+    "@std/fmt": "jsr:@std/fmt@^1.0.0",
+    "@std/path": "jsr:@std/path@^1.1.4",
+    "glob": "npm:glob@^13.0.0",
+    "rimraf": "npm:rimraf@^6.1.2"
   },
   "node": true,
   "lock": false,
-  "exclude": ["vcpkg", "build", "dist"]
+  "exclude": ["vcpkg", "build", "dist", "npm"],
+  "publish": {
+    "include": [
+      "mod.ts",
+      "main.ts",
+      "deps.ts",
+      "src/**/*.ts",
+      "README.md",
+      "CHANGELOG.md",
+      "deno.json"
+    ],
+    "exclude": [
+      "src/**/*_test.ts"
+    ]
+  }
 }

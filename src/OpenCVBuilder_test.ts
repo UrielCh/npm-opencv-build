@@ -20,7 +20,13 @@ import { assert } from "../dev_deps.ts";
 Deno.test("testLib", function testLib(t) {
   // console.log('testLib started');
   // console.log('testLib started');
-  const env = new OpenCVBuildEnv({ prebuild: "latestBuild" });
+  const env = new OpenCVBuildEnv({
+    disableAutoBuild: true,
+    opencvIncludeDir: "dummy_include",
+    opencvLibDir: "dummy_lib",
+    opencvBinDir: "dummy_bin",
+  });
+
 
   const builder = new OpenCVBuilder(env);
   builder.getLibs.syncPath = false;

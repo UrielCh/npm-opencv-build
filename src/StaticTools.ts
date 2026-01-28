@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { getDirname, getEnv, setEnv } from "./env.ts";
+import { getDirname, getEnv, setEnv, getCwd, realPathSync } from "./env.ts";
 import type { OpenCVBuildEnvParams } from "./misc.ts";
 import * as detector from "./helper/detect.ts";
 import type { AutoBuildFile } from "./types.ts";
@@ -24,7 +24,7 @@ class StaticTools {
    * @param opts
    * @returns
    */
-  public getBuildDir(opts = {} as OpenCVBuildEnvParams) {
+  public getBuildDir(opts = {} as OpenCVBuildEnvParams): string {
     let buildRoot = opts.buildRoot || getEnv("OPENCV_BUILD_ROOT") ||
       path.join(getDirname(), "..");
     if (buildRoot[0] === "~") {
@@ -34,8 +34,12 @@ class StaticTools {
   }
 
   public getPackageJson(opts = {} as OpenCVBuildEnvParams): string {
-    const packageRoot = opts.rootcwd || getEnv("INIT_CWD") || Deno.cwd();
-    return Deno.realPathSync(packageRoot + "/package.json");
+    const packageRoot = opts.rootcwd || getEnv("INIT_CWD") || getCwd();
+    const absPath = path.resolve(packageRoot, "package.json");
+    if (fs.existsSync(absPath)) {
+      return realPathSync(absPath);
+    }
+    return absPath;
   }
 
   /**
@@ -229,5 +233,5 @@ class StaticTools {
   }
 }
 
-const singleton = new StaticTools();
+const singleton: StaticTools = new StaticTools();
 export default singleton;

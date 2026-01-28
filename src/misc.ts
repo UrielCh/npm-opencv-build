@@ -48,7 +48,7 @@ export interface OpenCVBuildEnvParamsString {
    */
   opencvBinDir?: string; // never used based on opencvBuild path + OS postfix
   /**
-   * Restrict cuda targeded version to a limited set of version
+   * Restrict cuda targeted version to a limited set of version
    * add on 28/12/2022
    */
   cudaArch?: string;
@@ -154,7 +154,7 @@ export const ALLARGS = {
     env: "OPENCV4NODEJS_BUILD_CUDA_ARCH",
     isBool: false,
     doc:
-      "Specify the cuda arch will drasticly reduce build time, see https://en.wikipedia.org/wiki/CUDA, ex if you have a RTX 3080 use --cudaArch=8.6, if you have also a RTX 2080 --cudaArch=7.5,8.6",
+      "Specify the cuda arch will drastically reduce build time, see https://en.wikipedia.org/wiki/CUDA, ex if you have a RTX 3080 use --cudaArch=8.6, if you have also a RTX 2080 --cudaArch=7.5,8.6",
   } as ArgInfo,
   nocontrib: {
     arg: "nocontrib",
@@ -168,7 +168,7 @@ export const ALLARGS = {
     conf: "disableAutoBuild",
     env: "OPENCV4NODEJS_DISABLE_AUTOBUILD",
     isBool: true,
-    doc: "Do build OpenCV",
+    doc: "Disable OpenCV auto build",
   } as ArgInfo,
   incDir: {
     arg: "incDir",
@@ -208,7 +208,7 @@ export const ALLARGS = {
     conf: "git-cache",
     env: "OPENCV_GIT_CACHE",
     isBool: true,
-    doc: "Reduce Bandwide usage, by keeping a local git souce un the buildRoot",
+    doc: "Reduce Bandwidth usage, by keeping a local git source in the buildRoot",
   } as ArgInfo,
   json: {
     arg: "json",
@@ -664,8 +664,8 @@ export const MODEULES_MAP = {
 export type OpencvModulesType = keyof typeof MODEULES_MAP;
 
 /**
- * All available module fron openCV 4.5.5
+ * All available module from openCV 4.10.0
  */
-export const ALL_OPENCV_MODULES = new Set(
+export const ALL_OPENCV_MODULES: Set<OpencvModulesType> = new Set(
   Object.keys(MODEULES_MAP) as OpencvModulesType[],
 );

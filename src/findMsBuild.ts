@@ -1,5 +1,5 @@
 import path from "node:path";
-import { globSync } from "npm:glob";
+import { globSync } from "glob";
 import Log from "./Log.ts";
 import { execFile, formatNumber, highlight, light } from "./utils.ts";
 import { getEnv } from "./env.ts";

@@ -1,4 +1,6 @@
 import { path } from "../deps.ts";
+import process from "node:process";
+import fs from "node:fs";
 
 /**
  * portable env functions
@@ -8,14 +10,19 @@ export function getEnv(name: string): string {
   if (!name) {
     return "";
   }
-  // const value = process.env[name];
-  const value = Deno.env.get(name);
-  return value || "";
+  return process.env[name] || "";
 }
 
 export function setEnv(name: string, value: string): void {
-  // process.env[name] = value;
-  Deno.env.set(name, value);
+  process.env[name] = value;
+}
+
+export function getCwd(): string {
+  return process.cwd();
+}
+
+export function realPathSync(path: string): string {
+  return fs.realpathSync(path);
 }
 
 export function getDirname(): string {
@@ -29,23 +36,22 @@ export function getDirname(): string {
 }
 
 export class Platfrm {
-  public static theOS: string = Deno.build.os; // process.platform;
+  public static theOS: string = process.platform;
 
   public static changeOS(os: "windows" | "linux" | "darwin" | string) {
     Platfrm.theOS = os;
   }
-  public static get isWindows() {
+  public static get isWindows(): boolean {
     return Platfrm.theOS.startsWith("win"); //  === 'windows';
   }
-  public static get isLinux() {
+  public static get isLinux(): boolean {
     return Platfrm.theOS === "linux";
   }
-  public static get isMac() {
+  public static get isMac(): boolean {
     return Platfrm.theOS === "darwin";
   }
 }
 
 export function getArch(): string {
-  // return process.arch;
-  return Deno.build.arch;
+  return process.arch;
 }

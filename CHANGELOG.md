@@ -2,7 +2,12 @@
 
 ## V 1.2.0
 
-- add --json flag to output build configuration (N-API support)
+- enable JSR deployment and improve package quality (centralized dependencies,
+  explicit types)
+- improve NPM compatibility and Deno test reliability
+- add `--json` flag for N-API build configuration output
+- update default OpenCV version to 4.10.0 and refine documentation
+- update author URL to https://uriel.ovh/
 
 ## V 1.1.1
 

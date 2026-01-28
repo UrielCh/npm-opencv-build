@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { globSync } from "npm:glob";
+import { globSync } from "glob";
 import { highlight } from "../utils.ts";
 import { Platfrm, setEnv } from "../env.ts";
 

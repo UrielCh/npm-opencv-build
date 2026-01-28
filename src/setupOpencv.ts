@@ -2,9 +2,9 @@ import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "node:path";
 import Log from "./Log.ts";
-import { rimraf } from "npm:rimraf";
+import { rimraf } from "rimraf";
 import type { OpenCVBuilder } from "./OpenCVBuilder.ts";
-import { findMSBuild, PathVersion } from "./findMsBuild.ts";
+import { type PathVersion, findMSBuild } from "./findMsBuild.ts";
 import type { AutoBuildFile } from "./types.ts";
 import {
   formatNumber,

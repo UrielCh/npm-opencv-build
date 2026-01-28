@@ -51,7 +51,7 @@ export async function buildDnt() {
   const packageJson: PackageJson = {
     // package.json properties
     name: "@u4/opencv-build",
-    author: "Uriel Chemouni <uchemouni@gmail.com> (https://uriel.deno.dev/)",
+    author: "Uriel Chemouni <uchemouni@gmail.com> (https://uriel.ovh/)",
     license: "MIT",
     funding: `https://github.com/UrielCh/${prj}?sponsor=1`,
     contributors: [
