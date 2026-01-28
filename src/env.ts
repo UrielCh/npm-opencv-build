@@ -1,6 +1,7 @@
-import { path } from "../deps.ts";
+import { dirname } from "node:path";
 import process from "node:process";
 import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
 /**
  * portable env functions
@@ -31,7 +32,7 @@ export function getDirname(): string {
   // return __dirname;
   // }
   // return import.meta.url if it's a module
-  const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
+  const __dirname = dirname(fileURLToPath(import.meta.url));
   return __dirname; // new URL(".", import.meta.url).pathname;
 }
 

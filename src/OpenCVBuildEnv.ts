@@ -19,7 +19,7 @@ import * as detector from "./helper/detect.ts";
 import { getEnv, Platfrm, setEnv } from "./env.ts";
 import Log from "./Log.ts";
 import StaticTools from "./StaticTools.ts";
-import { pc } from "../deps.ts";
+import pc from "picocolors";
 
 function toBool(value?: string | null) {
   if (!value) {

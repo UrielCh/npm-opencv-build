@@ -1,6 +1,6 @@
 // dnt deps can not be moved to dev_deps.ts
 import { build, emptyDir, type PackageJson } from "@deno/dnt";
-import { pc } from "./deps.ts";
+import pc from "picocolors";
 
 // deno run -A _build_npm.ts 1.0.0
 // cd npm
@@ -90,7 +90,9 @@ export async function buildDnt() {
     },
     dependencies: {
       "@denodnt/logger": "^1.1.6",
-      // "picocolors": "1.0.0",
+      "picocolors": "^1.1.1",
+      "glob": "^13.0.0",
+      "rimraf": "^6.1.2",
     },
     //devDependencies: {
     //  "@types/npmlog": "^7.0.0",
@@ -139,19 +141,7 @@ export async function buildDnt() {
       lib: ["ESNext"],
     },
     package: packageJson,
-    mappings: {
-      // "jsr:@std/fmt/colors":
-      // "https://deno.land/std@0.223.0/fmt/colors.ts": {
-      //   name: "picocolors",
-      //   version: "1.0.0",
-      //   peerDependency: false,
-      // },
-      // "jsr:@deno-lib/logger@^1.1.6": {
-      //    name: "@denodnt/logger",
-      //    version: "1.1.6",
-      //    peerDependency: false,
-      // },
-    },
+    mappings: {},
   });
 
   // post build steps

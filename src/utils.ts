@@ -2,7 +2,7 @@ import child_process from "node:child_process";
 import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "node:path";
-import { pc } from "../deps.ts";
+import pc from "picocolors";
 import { getEnv, Platfrm } from "./env.ts";
 import Log from "./Log.ts";
 
