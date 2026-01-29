@@ -3,7 +3,7 @@
 // import { OpenCVBuildEnv, OpenCVBuilder } from '../dist/cjs/index'
 import OpenCVBuildEnv from "./OpenCVBuildEnv.ts";
 import { OpenCVBuilder } from "./OpenCVBuilder.ts";
-import { assert } from "../dev_deps.ts";
+import assertNode from "node:assert";
 
 // chai.use(require('chai-string'));
 
@@ -31,7 +31,7 @@ Deno.test("testLib", function testLib(t) {
   const builder = new OpenCVBuilder(env);
   builder.getLibs.syncPath = false;
   // const opencvModules = builder.env.enabledModules;
-  assert(builder, "builder ready");
+  assertNode(builder, "builder ready");
   //t.step('should find  .lib (win) Fullpath test', () => {
   //   const libFiles = [ 'opencv_340.lib' ]
   //   Platfrm.changeOS('windows');
