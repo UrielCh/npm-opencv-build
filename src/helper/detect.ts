@@ -35,6 +35,12 @@ export function detectBinDir(): string {
       "c:/tools/opencv/build/x64/vc*/bin",
       // vcpkg
       "c:/vcpkg/packages/opencv4_x64-windows/bin",
+      // "c:/vcpkg/installed/x64-windows/bin",
+      // "c:/vcpkg/installed/x64-windows-release/bin",
+      // vcpkg local
+      "./vcpkg/packages/opencv4_x64-windows/bin",
+      // "./vcpkg/installed/x64-windows/bin",
+      // "./vcpkg/installed/x64-windows-release/bin",
     ];
     // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\bin", "c:\\tools\\opencv\\build\\x64\\vc16\\bin"];
     let candidates: string[] = [];
@@ -92,6 +98,12 @@ export function detectLibDir(): string {
       "c:/tools/opencv/build/x64/vc*/lib",
       // vcpkg
       "c:/vcpkg/packages/opencv4_x64-windows/lib",
+      "c:/vcpkg/installed/x64-windows/lib",
+      "c:/vcpkg/installed/x64-windows-release/lib",
+      // vcpkg local
+      "./vcpkg/packages/opencv4_x64-windows/lib",
+      "./vcpkg/installed/x64-windows/lib",
+      "./vcpkg/installed/x64-windows-release/lib",
     ];
     // const candidates = ["c:\\tools\\opencv\\build\\x64\\vc14\\bin", "c:\\tools\\opencv\\build\\x64\\vc16\\bin"];
     let candidates: string[] = [];
@@ -157,6 +169,12 @@ export function detectIncludeDir(): string {
       "c:\\tools\\opencv\\build\\include",
       // vcpkg
       "c:\\vcpkg\\packages\\opencv4_x64-windows\\include",
+      "c:\\vcpkg\\installed\\x64-windows\\include",
+      "c:\\vcpkg\\installed\\x64-windows-release\\include",
+      // vcpkg local
+      "./vcpkg/packages/opencv4_x64-windows/include",
+      "./vcpkg/installed/x64-windows/include",
+      "./vcpkg/installed/x64-windows-release/include",
     ];
 
     for (const candidate of candidates) {
