@@ -18,11 +18,6 @@ jobs:
     env:
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     steps:
-    - uses: actions/checkout@v4
-    - uses: denoland/setup-deno@v1
-      with:
-        deno-version: v1.x
-
     - name: Install OpenCV ${{ matrix.opencv_version }}
       uses: brinkqiang/vcpkg-action@v1
       id: vcpkg
@@ -32,13 +27,12 @@ jobs:
         token: ${{ github.token }}
         github-binarycache: true
 
-    - name: vcpkg install opencv
-      run: |
-         vcpkg install opencv
+    - uses: actions/checkout@v4
 
-    #- name: Install OpenCV ${{ matrix.opencv_version }}
-    #  run: |
-    #     vcpkg install opencv
+    - uses: denoland/setup-deno@v1
+      with:
+        deno-version: v1.x
+
     - name: Detect OpenCV
       run: deno run -A main.ts --verbose
     - run: deno test -A
